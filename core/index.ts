@@ -6,20 +6,6 @@ import Main from "..";
 import Event from "./events";
 import logger from "./utils/logger";
 
-import { BanModel } from "./models/ban";
-import { UserModel } from "./models/user";
-import { GuildModel } from "./models/guild";
-import { TicketModel } from "./models/ticket";
-import { InviteModel } from "./models/invite";
-
-export interface IDatabase {
-  ban: typeof BanModel;
-  users: typeof UserModel;
-  guilds: typeof GuildModel;
-  tickets: typeof TicketModel;
-  invites: typeof InviteModel;
-}
-
 export interface ISettings {
   name: string;
   prefix: string;
@@ -40,8 +26,6 @@ export interface IModules {
 }
 
 export default class Modules {
-  db: IDatabase;
-
   constructor(client: Main, settings: ISettings) {
     client.login(settings.token);
 
@@ -128,12 +112,11 @@ export default class Modules {
         typeof tmpEvent.default === "function" ? tmpEvent.default : null;
       if (!event) return;
 
-      console.log(this)
       try {
         const eventObj: Event = new event(this);
         if (eventObj && eventObj.name) {
           client.addListener(eventObj.name, (...args) =>
-            eventObj.handle.bind(eventObj)(this, client, ...args)
+            eventObj.handle.bind(eventObj)(client, ...args)
           );
         }
       } catch (ignored) {}

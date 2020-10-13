@@ -1,22 +1,21 @@
-import Bot from "..";
-import Modules from "..";
 import Main from "../../";
 
 import { Message } from "discord.js";
+import { UserModel } from "../models/user";
 
 export default class levels {
   name = "message";
 
-  async handle(modules: Modules, client: Main, message: Message) {
+  async handle(client: Main, message: Message) {
     if (!message.guild || !message.author || message.author.bot) return;
 
     const userData =
-      (await modules.db.users.findOne({
+      (await UserModel.findOne({
         userId: message.author.id,
       })) ||
-      (await modules.db.users.create({
+      new UserModel({
         userId: message.author.id,
-      }));
+      });
 
     if (!userData.leveling.lastMessageTime) {
       userData.leveling.lastMessageTime = Date.now();

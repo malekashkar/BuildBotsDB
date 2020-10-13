@@ -6,6 +6,7 @@ import { DbUser } from "../../models/user";
 import { DbGuild } from "../../models/guild";
 import pretty from "pretty-ms";
 import ms from "ms";
+import { BanModel } from "../../models/ban";
 
 export default class TempBanCommand extends Command {
   cmdName = "tempban";
@@ -37,7 +38,7 @@ export default class TempBanCommand extends Command {
       );
 
     targetUser.ban();
-    new this.bot.db.ban({
+    new BanModel({
       _id: message.author.id,
       banTime,
     });

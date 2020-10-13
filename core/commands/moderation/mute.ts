@@ -2,7 +2,7 @@ import Command from "..";
 import Main from "../../..";
 import { Message } from "discord.js";
 import embeds from "../../utils/embeds";
-import { DbUser } from "../../models/user";
+import { DbUser, UserModel } from "../../models/user";
 import { DbGuild } from "../../models/guild";
 import pretty from "pretty-ms";
 import ms from "ms";
@@ -28,10 +28,10 @@ export default class ClearAllCommmand extends Command {
       );
 
     userData =
-      (await this.bot.db.users.findOne({
+      (await UserModel.findOne({
         userId: targetUser.id,
       })) ||
-      new this.bot.db.users({
+      new UserModel({
         userId: targetUser.id,
       });
 

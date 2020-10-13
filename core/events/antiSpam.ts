@@ -1,24 +1,24 @@
 import Main from "../../";
-import Modules from "..";
 import embeds from "../utils/embeds";
 
 import { Message } from "discord.js";
 import { badWords, linkParts } from "../utils/storage";
+import { UserModel } from "../models/user";
 
 export default class antiSpam {
   name = "message";
 
-  async handle(modules: Modules, client: Main, message: Message) {
+  async handle(client: Main, message: Message) {
     if (message.author.bot || message.member.hasPermission("ADMINISTRATOR"))
       return;
 
     const userData =
-      (await modules.db.users.findOne({
+      (await UserModel.findOne({
         userId: message.author.id,
       })) ||
-      (await modules.db.users.create({
+      new UserModel({
         userId: message.author.id,
-      }));
+      });
 
     if (
       (message.content === userData.messages.lastMessage &&

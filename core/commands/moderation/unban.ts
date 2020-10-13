@@ -4,6 +4,7 @@ import { Message } from "discord.js";
 import embeds from "../../utils/embeds";
 import { DbUser } from "../../models/user";
 import { DbGuild } from "../../models/guild";
+import { BanModel } from "../../models/ban";
 
 export default class UnbanCommand extends Command {
   cmdName = "unban";
@@ -43,8 +44,8 @@ export default class UnbanCommand extends Command {
         embeds.error(`The user ${targetUser} is not banned!`)
       );
 
-    const banData = await this.bot.db.ban.findById(user.user.id);
-    if (banData) await this.bot.db.ban.deleteOne({ _id: user.user.id });
+    const banData = await BanModel.findById(user.user.id);
+    if (banData) await BanModel.deleteOne({ _id: user.user.id });
 
     message.guild.members.unban(user.user.id);
     return message.channel.send(

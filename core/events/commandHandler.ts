@@ -1,33 +1,32 @@
 import Main from "../../";
-import Modules from "../";
 import Command from "../commands";
 import embeds from "../utils/embeds";
 import logger from "../utils/logger";
 
 import { Message } from "discord.js";
+import { GuildModel } from "../models/guild";
+import { UserModel } from "../models/user";
 
 export default class commandHandler {
   name = "message";
 
-  async handle(modules: Modules, client: Main, message: Message) {
+  async handle(client: Main, message: Message) {
     try {
       if (!message.guild || !message.author || message.author.bot) return;
 
-      console.log(modules.db);
-
       const guildData =
-        (await modules.db.guilds.findById(message.guild.id)) ||
-        new modules.db.guilds({
+        (await GuildModel.findById(message.guild.id)) ||
+        new GuildModel({
           _id: message.guild.id,
         });
 
       const userData =
-        (await modules.db.users.findOne({
+        (await UserModel.findOne({
           userId: message.author.id,
         })) ||
-        (await modules.db.users.create({
+        new UserModel({
           userId: message.author.id,
-        }));
+        });
 
       userData.totalMessages += 1;
       await userData.save();
@@ -62,7 +61,7 @@ export default class commandHandler {
         for (const commandObj of client.commands.array()) {
           if (commandObj.disabled) continue;
           if (commandObj.cmdName.toLowerCase() === command) {
-            commandObj.run.bind(modules)(
+            commandObj.run(
               client,
               message,
               args,

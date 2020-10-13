@@ -1,20 +1,16 @@
-import Models from "..";
 import Main from "../../";
 import moment from "moment";
 import embeds from "../utils/embeds";
 
 import { MessageReaction, TextChannel, User } from "discord.js";
 import { MessageEmbed } from "discord.js";
+import { GuildModel } from "../models/guild";
+import { TicketModel } from "../models/ticket";
 
 export default class createTicket {
   name = "messageReactionAdd";
 
-  async handle(
-    modules: Models,
-    client: Main,
-    reaction: MessageReaction,
-    user: User
-  ) {
+  async handle(client: Main, reaction: MessageReaction, user: User) {
     if (user.bot) return;
     if (reaction.message.partial) reaction.message.fetch();
     if (reaction.emoji.name !== "🎫") return;
@@ -22,7 +18,7 @@ export default class createTicket {
     const message = reaction.message;
     reaction.users.remove(user);
 
-    const settings = await modules.db.guilds.findById(message.guild.id);
+    const settings = await GuildModel.findById(message.guild.id);
     if (!settings) return;
 
     const typeData = settings.ticketTypes.find(
@@ -58,7 +54,7 @@ export default class createTicket {
       )
     );
 
-    const ticketData = await modules.db.tickets.create({
+    const ticketData = new TicketModel({
       ticketType: typeData.name,
       channelId: channel.id,
       openedFor: user.id,

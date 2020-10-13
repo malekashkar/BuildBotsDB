@@ -4,6 +4,7 @@ import Main from "../../..";
 import embeds from "../../utils/embeds";
 import pretty from "pretty-ms";
 import ms from "ms";
+import { BanModel } from "../../models/ban";
 
 export default class BanCommand extends Command {
   cmdName: "ban";
@@ -11,11 +12,7 @@ export default class BanCommand extends Command {
   usage: "<@user>";
   groupName: "moderation";
 
-  async run(
-    client: Main,
-    message: Message,
-    args: string[],
-  ) {
+  async run(client: Main, message: Message, args: string[]) {
     const targetUser = message.mentions.members.first();
     if (!targetUser)
       return message.channel.send(
@@ -26,7 +23,7 @@ export default class BanCommand extends Command {
 
     if (banTime) {
       targetUser.ban();
-      new this.bot.db.ban({
+      new BanModel({
         _id: message.author.id,
         banTime,
       });

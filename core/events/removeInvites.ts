@@ -1,13 +1,14 @@
-import Modules from "..";
 import Main from "../../";
 import placeholders from "../utils/placeholders";
 
 import { GuildMember, TextChannel } from "discord.js";
+import { InviteModel } from "../models/invite";
+import { GuildModel } from "../models/guild";
 
 export default class removeInvites {
   name: "guildMemberRemove";
 
-  async handle(modules: Modules, client: Main, member: GuildMember) {
+  async handle(client: Main, member: GuildMember) {
     const guildInvites = await member.guild.fetchInvites();
     const ei = client.invites.get(member.guild.id);
     client.invites.set(member.guild.id, guildInvites);
@@ -18,15 +19,15 @@ export default class removeInvites {
           return ei.get(i.code).uses > i.uses;
       }) || guildInvites.find((i) => !ei.get(i.code) && i.uses <= 1);
     const inviter = invite.inviter;
-    const invitesData = await modules.db.invites.find({
+    const invitesData = await InviteModel.find({
       inviterId: inviter.id,
     });
 
-    await modules.db.invites.deleteOne({
+    await InviteModel.deleteOne({
       userJoinedId: member.id,
     });
 
-    const guildData = await modules.db.guilds.findById(member.guild.id);
+    const guildData = await GuildModel.findById(member.guild.id);
     if (!guildData) return;
     const guild = client.guilds.resolve(guildData._id);
 

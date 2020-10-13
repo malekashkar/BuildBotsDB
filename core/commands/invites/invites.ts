@@ -5,7 +5,7 @@ import { DbUser } from "../../models/user";
 import { DbGuild } from "../../models/guild";
 import embeds from "../../utils/embeds";
 import confirmation from "../../utils/confirmation";
-
+import { InviteModel } from "../../models/invite";
 export default class InvitesCommand extends Command {
   cmdName: "invoice";
   description: "Create or delete invoices.";
@@ -20,7 +20,7 @@ export default class InvitesCommand extends Command {
     command: string
   ) {
     console.log(this);
-    
+
     const options = ["create"];
     type Option = typeof options[number];
     const option = args[0]
@@ -119,7 +119,7 @@ export default class InvitesCommand extends Command {
 
     if (!conf) return;
 
-    await this.bot.db.invites.deleteMany({
+    await InviteModel.deleteMany({
       invitedId: user.id,
     });
 
@@ -199,7 +199,7 @@ export default class InvitesCommand extends Command {
 
     if (!conf) return;
 
-    const currentInvites = await this.bot.db.invites.find({
+    const currentInvites = await InviteModel.find({
       inviterId: user.id,
     });
 
@@ -209,7 +209,7 @@ export default class InvitesCommand extends Command {
       );
 
     for (let i = 0; i < amount - currentInvites.length; i++) {
-      await this.bot.db.invites.create({
+      new InviteModel({
         inviterId: user.id,
       });
     }

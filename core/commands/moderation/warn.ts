@@ -2,8 +2,9 @@ import embeds from "../../utils/embeds";
 import Command from "..";
 import Main from "../../..";
 import { Message } from "discord.js";
-import { DbUser } from "../../models/user";
+import { DbUser, UserModel } from "../../models/user";
 import { DbGuild } from "../../models/guild";
+import { BanModel } from "../../models/ban";
 
 export default class WarnCommand extends Command {
   cmdName = "warn";
@@ -29,10 +30,10 @@ export default class WarnCommand extends Command {
     const reason = args.join(" ") ? args.join(" ") : `No reason provided.`;
 
     userData =
-      (await this.bot.db.users.findOne({
+      (await UserModel.findOne({
         userId: targetUser.id,
       })) ||
-      new this.bot.db.users({
+      new UserModel({
         userId: targetUser.id,
       });
 
@@ -111,7 +112,7 @@ export default class WarnCommand extends Command {
       );
     } else if (userData.warnings.length === 4) {
       targetUser.ban();
-      new this.bot.db.ban({
+      new BanModel({
         _id: message.author.id,
         banTime: 7 * 24 * 60 * 60 * 1000,
       });

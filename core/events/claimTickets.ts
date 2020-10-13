@@ -1,14 +1,14 @@
-import Modules from "..";
 import Main from "../../";
 import embeds from "../utils/embeds";
 
 import { MessageReaction, TextChannel, User } from "discord.js";
+import { GuildModel } from "../models/guild";
+import { TicketModel } from "../models/ticket";
 
 export default class claimTickets {
   name = "messageReactionAdd";
 
   async handle(
-    modules: Modules,
     client: Main,
     reaction: MessageReaction,
     user: User
@@ -19,10 +19,10 @@ export default class claimTickets {
 
     const message = reaction.message;
 
-    const settings = await modules.db.guilds.findById(message.guild.id);
+    const settings = await GuildModel.findById(message.guild.id);
     if (!settings) return;
 
-    const ticketData = await modules.db.tickets.findOne({
+    const ticketData = await TicketModel.findOne({
       claimMsg: message.id,
     });
     if (!ticketData) return;

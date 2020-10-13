@@ -4,6 +4,7 @@ import { getLevel, xpUntilNextLevel } from "../../utils/levels";
 import { DbGuild } from "../../models/guild";
 import { DbUser } from "../../models/user";
 import Main from "../../..";
+import { UserModel } from "../../models/user";
 
 export default class Commmand extends Command {
   cmdName = "level";
@@ -14,7 +15,7 @@ export default class Commmand extends Command {
   async run(client: Main, message: Message, args: string[], userData: DbUser) {
     const user = message.mentions.users.first() || message.author;
     if (user !== message.author)
-      userData = await this.bot.db.users.findOne({
+      userData = await UserModel.findOne({
         userId: user.id,
       });
     const xp =

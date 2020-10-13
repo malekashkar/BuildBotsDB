@@ -11,6 +11,7 @@ import Main from "../../..";
 import { DbGuild } from "../../models/guild";
 import { DbUser } from "../../models/user";
 import embeds from "../../utils/embeds";
+import { TicketModel } from "../../models/ticket";
 
 export default class TicketCommand extends Command {
   cmdName = "tickets";
@@ -169,7 +170,7 @@ export default class TicketCommand extends Command {
     guildData: DbGuild,
     command: string
   ) {
-    const ticketData = await this.bot.db.tickets.findOne({
+    const ticketData = await TicketModel.findOne({
       channelId: message.channel.id,
     });
     if (!ticketData)
@@ -355,7 +356,7 @@ export default class TicketCommand extends Command {
     guildData: DbGuild,
     command: string
   ) {
-    const ticketData = await this.bot.db.tickets.findOne({
+    const ticketData = await TicketModel.findOne({
       channelId: message.channel.id,
     });
     if (!ticketData)
@@ -384,7 +385,7 @@ export default class TicketCommand extends Command {
 
     setTimeout(async () => {
       if ((message.channel as TextChannel).deletable) message.channel.delete();
-      await this.bot.db.tickets.deleteOne({
+      await TicketModel.deleteOne({
         channelId: message.channel.id,
       });
     }, 10 * 1000);
@@ -454,7 +455,7 @@ export default class TicketCommand extends Command {
     guildData: DbGuild,
     command: string
   ) {
-    const ticketData = await this.bot.db.tickets.findOne({
+    const ticketData = await TicketModel.findOne({
       channelId: message.channel.id,
     });
     if (!ticketData)

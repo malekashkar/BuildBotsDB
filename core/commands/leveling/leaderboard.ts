@@ -3,6 +3,7 @@ import { Message } from "discord.js";
 import embeds from "../../utils/embeds";
 import { getBorderCharacters, table } from "table";
 import Main from "../../..";
+import { UserModel } from "../../models/user";
 
 export default class Commmand extends Command {
   cmdName = "leaderboard";
@@ -12,7 +13,7 @@ export default class Commmand extends Command {
   async run(client: Main, message: Message) {
     try {
       let guild = message.guild;
-      let members = await this.bot.db.users.find();
+      let members = await UserModel.find();
       if (!members.length)
         return message.channel.send(
           embeds.error(`No one in this server has exp!`)

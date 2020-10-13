@@ -1,7 +1,7 @@
 import Command from "..";
 import Main from "../../..";
 import { Message, MessageEmbed } from "discord.js";
-import { DbUser } from "../../models/user";
+import { DbUser, UserModel } from "../../models/user";
 import { DbGuild } from "../../models/guild";
 import moment from "moment";
 import pretty from "pretty-ms";
@@ -24,12 +24,12 @@ export default class UserinfoCommand extends Command {
     if (!targetUser) targetUser = message.member;
 
     userData =
-      (await this.bot.db.users.findOne({
+      (await UserModel.findOne({
         userId: targetUser.id,
       })) ||
-      (await this.bot.db.users.create({
+      new UserModel({
         userId: targetUser.id,
-      }));
+      });
     const muteData = userData.muted;
 
     return message.channel.send(
