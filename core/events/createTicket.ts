@@ -1,0 +1,105 @@
+import Models from "..";
+import Main from "../../";
+import moment from "moment";
+import embeds from "../utils/embeds";
+
+import { MessageReaction, TextChannel, User } from "discord.js";
+import { MessageEmbed } from "discord.js";
+
+export default class createTicket {
+  name = "messageReactionAdd";
+
+  async handle(
+    modules: Models,
+    client: Main,
+    reaction: MessageReaction,
+    user: User
+  ) {
+    if (user.bot) return;
+    if (reaction.message.partial) reaction.message.fetch();
+    if (reaction.emoji.name !== "🎫") return;
+
+    const message = reaction.message;
+    reaction.users.remove(user);
+
+    const settings = await modules.db.guilds.findById(message.guild.id);
+    if (!settings) return;
+
+    const typeData = settings.ticketTypes.find(
+      (x) => x.panelMessageId === message.id
+    );
+    if (!typeData) return;
+
+    const channel = await message.guild.channels.create(
+      `${user.username}-ticket`,
+      {
+        type: "text",
+        permissionOverwrites: [
+          {
+            id: message.guild.id,
+            deny: ["VIEW_CHANNEL"],
+          },
+          {
+            id: user.id,
+            allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+          },
+        ],
+      }
+    );
+
+    if (typeData.categoryId) channel.setParent(typeData.categoryId);
+    await channel.send(
+      embeds.normal(
+        `${
+          typeData.name.charAt(0).toUpperCase() +
+          typeData.name.slice(1).toLowerCase()
+        } Ticket`,
+        typeData.joinMsg
+      )
+    );
+
+    const ticketData = await modules.db.tickets.create({
+      ticketType: typeData.name,
+      channelId: channel.id,
+      openedFor: user.id,
+    });
+
+    if (typeData.claimChannelId) {
+      const claimChannel = client.channels.resolve(
+        typeData.claimChannelId
+      ) as TextChannel;
+      if (!claimChannel) return;
+
+      const claimMsg = await claimChannel.send(
+        new MessageEmbed()
+          .setTitle(`Claim This Ticket`)
+          .setColor(`RANDOM`)
+          .setDescription(
+            `Who would like to claim the ticket with the info below?`
+          )
+          .addFields(
+            {
+              name: `Ticket Type`,
+              value: typeData.name,
+              inline: true,
+            },
+            {
+              name: `Time Opened`,
+              value: moment(Date.now()).format("LLL"),
+              inline: true,
+            },
+            {
+              name: `Opened By`,
+              value: user.tag,
+              inline: true,
+            }
+          )
+      );
+
+      claimMsg.react("✅");
+
+      ticketData.claimMsg = claimMsg.id;
+      await ticketData.save();
+    }
+  }
+}

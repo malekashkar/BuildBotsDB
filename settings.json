@@ -1,0 +1,16 @@
+{
+  "name": "BuildBotsDB",
+  "prefix": "!",
+  "owner": "584915458302672916",
+  "token": "NzU4NzQzMzUyNTk3NDEzODk5.X2zY0A.gtkwHD6tOIXCEAVkC9ZT-rTApzA",
+  "mongoURL": "mongodb://localhost/",
+  "modules": {
+    "giveaways": true,
+    "invites": true,
+    "leveling": true,
+    "moderation": true,
+    "payments": true,
+    "tickets": true,
+    "utils": true
+  }
+}
