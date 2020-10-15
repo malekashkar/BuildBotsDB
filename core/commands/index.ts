@@ -1,8 +1,7 @@
 import Main from "../../";
-import { Client, Message } from "discord.js";
+import { Message } from "discord.js";
 import { DbUser } from "../models/user";
 import { DbGuild } from "../models/guild";
-
 export default abstract class Command {
   aliases?: string[] = [];
   disabled = false;
@@ -17,6 +16,6 @@ export default abstract class Command {
     _args: string[],
     _userData?: DbUser,
     _guildData?: DbGuild,
-    _command?: string,
+    _command?: string
   ): Promise<Message | void>;
 }

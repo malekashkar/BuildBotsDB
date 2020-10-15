@@ -21,10 +21,17 @@ export default class createTicket {
     const settings = await GuildModel.findById(message.guild.id);
     if (!settings) return;
 
+    const tickets = await TicketModel.find({
+      openedFor: user.id,
+    });
+    if (tickets.length === 3) return;
+
     const typeData = settings.ticketTypes.find(
       (x) => x.panelMessageId === message.id
     );
     if (!typeData) return;
+
+      console.log(user.id)
 
     const channel = await message.guild.channels.create(
       `${user.username}-ticket`,
@@ -32,12 +39,12 @@ export default class createTicket {
         type: "text",
         permissionOverwrites: [
           {
-            id: message.guild.id,
-            deny: ["VIEW_CHANNEL"],
+            id: user.id,
+            allow: ["SEND_MESSAGES", "READ_MESSAGE_HISTORY", "VIEW_CHANNEL"],
           },
           {
-            id: user.id,
-            allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+            id: message.guild.roles.everyone,
+            deny: "VIEW_CHANNEL",
           },
         ],
       }

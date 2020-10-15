@@ -17,6 +17,8 @@ export default class addInvites {
         if (ei.get(i.code) && ei.get(i.code).uses)
           return ei.get(i.code).uses < i.uses;
       }) || guildInvites.find((i) => !ei.get(i.code) && i.uses >= 1);
+    if (!invite) return;
+
     const inviter = invite.inviter;
     const invitesData = await InviteModel.find({
       inviterId: inviter.id,

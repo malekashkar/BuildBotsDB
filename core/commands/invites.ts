@@ -1,15 +1,15 @@
-import Command from "..";
-import Main from "../../../";
+import Command from ".";
+import Main from "../..";
 import { Message, MessageEmbed } from "discord.js";
-import { DbUser } from "../../models/user";
-import { DbGuild } from "../../models/guild";
-import embeds from "../../utils/embeds";
-import confirmation from "../../utils/confirmation";
-import { InviteModel } from "../../models/invite";
+import { DbUser } from "../models/user";
+import { DbGuild } from "../models/guild";
+import embeds from "../utils/embeds";
+import confirmation from "../utils/confirmation";
+import { InviteModel } from "../models/invite";
 export default class InvitesCommand extends Command {
-  cmdName: "invoice";
-  description: "Create or delete invoices.";
-  groupName: "payments";
+  cmdName = "invites";
+  description = "Run an invite command.";
+  groupName = "invites";
 
   async run(
     client: Main,
@@ -19,27 +19,46 @@ export default class InvitesCommand extends Command {
     guildData: DbGuild,
     command: string
   ) {
-    console.log(this);
-
-    const options = ["create"];
+    const options = Object.keys(this).filter(
+      (x) => typeof (this as any)[x] === "function"
+    );
     type Option = typeof options[number];
-    const option = args[0]
-      ? options.includes(args[0])
-        ? (args[0] as Option)
-        : null
-      : null;
+    const option = args[0] as Option;
+    if (!option)
+      return message.channel.send(
+        embeds.error(
+          `Please provide one of the following arguments: \`${options.join(
+            ", "
+          )}\``
+        )
+      );
 
-    (this as any)[option](client, message, args, userData, guildData, command);
+    try {
+      (this as any)[option](
+        client,
+        message,
+        args,
+        userData,
+        guildData,
+        command
+      );
+    } catch (e) {
+      message.channel.send(
+        embeds.error(
+          `\`${option}\` is not a \`${this.cmdName}\` command option.`
+        )
+      );
+    }
   }
 
-  async addrole(
+  addrole = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const role = message.mentions.roles.first();
     if (!role)
       return message.channel.send(
@@ -68,16 +87,16 @@ export default class InvitesCommand extends Command {
         `The role ${role} is now an invite role with the requirement of \`${inviteAmount}\` invites.`
       )
     );
-  }
+  };
 
-  async removerole(
+  removerole = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const role = message.mentions.roles.first();
     if (!role || !guildData.invites.roles.some((x) => x.role === role.id))
       return message.channel.send(
@@ -95,16 +114,16 @@ export default class InvitesCommand extends Command {
         `The role ${role} has been removed from the invite roles.`
       )
     );
-  }
+  };
 
-  async reset(
+  reset = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const user = message.mentions.users.first();
     if (!user)
       return message.channel.send(
@@ -129,16 +148,16 @@ export default class InvitesCommand extends Command {
         `The invites of user ${user} have been reset to \`0\`.`
       )
     );
-  }
+  };
 
-  async roles(
+  roles = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const embed = new MessageEmbed()
       .setTitle(`Invite Roles`)
       .setDescription(
@@ -163,16 +182,16 @@ export default class InvitesCommand extends Command {
     }
 
     return message.channel.send(embed);
-  }
+  };
 
-  async set(
+  set = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const user = message.mentions.users.first();
     if (!user)
       return message.channel.send(
@@ -220,16 +239,16 @@ export default class InvitesCommand extends Command {
         `The invites of user ${user} have been set to \`${amount}\`.`
       )
     );
-  }
+  };
 
-  async setjoinchannel(
+  setjoinchannel = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const channel = message.mentions.channels.first();
     if (!channel)
       return message.channel.send(
@@ -245,16 +264,16 @@ export default class InvitesCommand extends Command {
         `All join messages will now be sent to ${channel}.`
       )
     );
-  }
+  };
 
-  async setjoinmsg(
+  setjoinmsg = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const msg = args.join(" ");
     if (!msg)
       return message.channel.send(
@@ -270,16 +289,16 @@ export default class InvitesCommand extends Command {
         `The join message has been set to \`\`\`${msg}\`\`\``
       )
     );
-  }
+  };
 
-  async setleavechannel(
+  setleavechannel = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const channel = message.mentions.channels.first();
     if (!channel)
       return message.channel.send(
@@ -295,16 +314,16 @@ export default class InvitesCommand extends Command {
         `All leave messages will now be sent to ${channel}.`
       )
     );
-  }
+  };
 
-  async setleavemsg(
+  setleavemsg = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const msg = args.join(" ");
     if (!msg)
       return message.channel.send(
@@ -320,5 +339,5 @@ export default class InvitesCommand extends Command {
         `The leave message has been set to \`\`\`${msg}\`\`\``
       )
     );
-  }
+  };
 }

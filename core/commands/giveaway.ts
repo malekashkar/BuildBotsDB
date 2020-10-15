@@ -1,17 +1,17 @@
 import { Message, MessageEmbed, Role, TextChannel } from "discord.js";
-import Command from "..";
-import Main from "../../..";
-import { DbGuild } from "../../models/guild";
-import { DbUser } from "../../models/user";
-import question from "../../utils/question";
+import Command from ".";
+import Main from "../..";
+import { DbGuild } from "../models/guild";
+import { DbUser } from "../models/user";
+import question from "../utils/question";
 import moment from "moment";
 import ms from "ms";
-import { Options } from "chalk";
+import embeds from "../utils/embeds";
 
 export default class GiveawayCommand extends Command {
-  cmdName: "giveaway";
-  description: "Interact with the giveaway commands.";
-  groupName: "giveaways";
+  cmdName = "giveaway";
+  description = "Interact with the giveaway commands.";
+  groupName = "giveaways";
 
   async run(
     client: Main,
@@ -21,37 +21,54 @@ export default class GiveawayCommand extends Command {
     guildData: DbGuild,
     command: string
   ) {
-    console.log(this);
-    
-    const options = ["create"];
+    const options = Object.keys(this).filter(
+      (x) => typeof (this as any)[x] === "function"
+    );
     type Option = typeof options[number];
-    const option = args[0]
-      ? options.includes(args[0])
-        ? (args[0] as Option)
-        : null
-      : null;
+    const option = args[0] as Option;
+    if (!option)
+      return message.channel.send(
+        embeds.error(
+          `Please provide one of the following arguments: \`${options.join(
+            ", "
+          )}\``
+        )
+      );
 
-    (this as any)[option](client, message, args, userData, guildData, command);
+    try {
+      (this as any)[option](
+        client,
+        message,
+        args,
+        userData,
+        guildData,
+        command
+      );
+    } catch (e) {
+      message.channel.send(
+        embeds.error(
+          `\`${option}\` is not a \`${this.cmdName}\` command option.`
+        )
+      );
+    }
   }
 
-  async create(
+  create = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const channel = await getChannelQuestion(
       `Where would you like to post the giveaway?\n\`Please tag the channel.\``,
       message
     );
 
-    const time = ms(
-      await question(
-        `How long would you like this giveaway to last?\n\`Example would be 1s, 10h, 2w.\``,
-        message
-      )
+    const time = await question(
+      `How long would you like this giveaway to last?\n\`Example would be 1s, 10h, 2w.\``,
+      message
     );
 
     const winners = await getNumberQuestion(
@@ -85,39 +102,52 @@ export default class GiveawayCommand extends Command {
       message
     );
 
-    const giveawayMsg = await channel.send(
-      new MessageEmbed()
-        .setColor("RANDOM")
-        .setTitle(`${winners > 1 ? `x${winners} ` : ``}${prize}`)
-        .setDescription(`React with :tada: to enter this giveaway!`)
-        .addField(
-          `Conditions`,
-          `Required Roles: ${
-            requiredRoles.length ? requiredRoles.map((x) => `<@&${x}>`) : `None`
-          }\nRequired Invites: ${
-            requiredInvites ? requiredInvites : `None`
-          }\nRequired Guilds: ${
-            requiredGuilds.length
-              ? requiredGuilds
-                  .map((x: string) => client.guilds.resolve(x).name)
-                  .join(", ")
-              : `None`
-          }\nRequired Messages: ${
-            requiredMessages ? requiredMessages : `None`
-          }`,
-          true
-        )
-        .addField(`Ending Time`, moment(Date.now() + time).format("LLL"), true)
-        .addField(`Winners`, winners, true)
-        .setFooter(`Ends at`)
-        .setTimestamp(Date.now() + time)
-    );
+    const embed = new MessageEmbed()
+      .setColor("RANDOM")
+      .setTitle(`${winners > 1 ? `x${winners} ` : ``}${prize}`)
+      .setDescription(`React with :tada: to enter this giveaway!`)
+      .addField(
+        `Ending Time`,
+        moment(Date.now() + ms(time)).format("LLL"),
+        true
+      )
+      .addField(`Winners`, winners, true)
+      .setFooter(`Ends at`)
+      .setTimestamp(Date.now() + ms(time));
+
+    if (
+      requiredRoles.length ||
+      requiredInvites ||
+      requiredGuilds.length ||
+      requiredMessages
+    ) {
+      embed.addField(
+        `Conditions`,
+        `${
+          !requiredRoles.length
+            ? ``
+            : `Required Roles:` + requiredRoles.map((x) => `<@&${x}>`)
+        }
+         ${requiredInvites ? `Required Invites: ${requiredInvites}` : ``}\n
+        ${
+          !requiredGuilds.length
+            ? `Required Guilds:` +
+              requiredGuilds
+                .map((x: string) => client.guilds.resolve(x).name)
+                .join(", ")
+            : ``
+        }\n${requiredMessages ? `Required Messages: ${requiredMessages}` : ``}`,
+        true
+      );
+    }
+
+    const giveawayMsg = await channel.send(embed);
     giveawayMsg.react("🎉");
 
     guildData.giveaways.giveawayList.push({
       prize,
       startTime: Date.now(),
-      endTime: Date.now() + time,
+      endTime: Date.now() + ms(time),
       winners,
       messageId: giveawayMsg.id,
       channelId: giveawayMsg.channel.id,
@@ -186,7 +216,9 @@ export default class GiveawayCommand extends Command {
     async function getRolesQuestion(question: string, message: Message) {
       const msg = await message.channel.send(question);
       const answer = await message.channel.awaitMessages(
-        (x) => x.author.id === message.author.id && x.mentions.roles.size,
+        (x) =>
+          (x.author.id === message.author.id && x.mentions.roles.size) ||
+          x.content === "0",
         {
           max: 1,
           time: 900000,
@@ -220,5 +252,5 @@ export default class GiveawayCommand extends Command {
 
       return answer ? parseInt(answer.first().content) : null;
     }
-  }
+  };
 }

@@ -7,7 +7,7 @@ export default class botStarted {
   async handle(client: Main) {
     logger.info(
       `BOT_STARTED`,
-      `The bot ${client.user.username} has started successfully (${client.user.id})`
+      `The bot "${client.user.username}" has started successfully.`
     );
   }
 }

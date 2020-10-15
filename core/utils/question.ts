@@ -8,9 +8,9 @@ export default async function question(
   const msg = await message.channel.send(question);
   const answer = await message.channel.awaitMessages(
     (x) =>
-      x.author.id === message.author.id && required.length
+      x.author.id === message.author.id && required && required.length
         ? required.includes(x.content)
-        : false,
+        : true,
     {
       max: 1,
       time: 900000,

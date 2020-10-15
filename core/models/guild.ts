@@ -3,13 +3,16 @@ import mongoose, { Document } from "mongoose";
 export interface DbGuild extends Document {
   _id: string;
   prefix: string;
-  roles: {
+  roles?: {
     mute: string;
   };
-  ticketTypes: ticketTypes[];
-  invites: invites;
-  payments: IPayments;
-  giveaways: giveaways;
+  ticketTypes?: ticketTypes[];
+  invites?: invites;
+  payments?: IPayments;
+  giveaways?: giveaways;
+  createOrder?: {
+    messageId: string;
+  };
 }
 
 interface ticketTypes {
@@ -66,7 +69,7 @@ interface giveawayList {
 
 export const GuildSchema = new mongoose.Schema({
   _id: { type: String, required: true },
-  prefix: { type: String, default: "!" },
+  prefix: { type: String, required: true, default: "!" },
   roles: {
     mute: { type: String, default: "Muted" },
   },
@@ -134,6 +137,9 @@ export const GuildSchema = new mongoose.Schema({
         },
       },
     ],
+  },
+  createOrder: {
+    messageId: String,
   },
 });
 

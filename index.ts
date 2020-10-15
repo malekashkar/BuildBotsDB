@@ -20,9 +20,4 @@ export default class Main extends Client {
   }
 }
 
-function start() {
-  console.log(`Sub bot ${settings.name} has started.`);
-  new modules(new Main(), settings);
-}
-
-start();
+new modules(new Main(), settings);

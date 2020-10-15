@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import Main from "..";
 import Event from "./events";
 import logger from "./utils/logger";
+import Command from "./commands";
 
 export interface ISettings {
   name: string;
@@ -73,22 +74,26 @@ export default class Modules {
       )
         continue;
 
-      const commandObj = require(commandPath);
-      if (!commandObj || !commandObj.name) continue;
+      const tmpCommand = require(commandPath);
+      const command =
+        typeof tmpCommand !== "function" &&
+        typeof tmpCommand.default === "function"
+          ? tmpCommand.default
+          : typeof tmpCommand === "function"
+          ? tmpCommand
+          : null;
 
-      if (client.commands.has(commandObj.name))
-        return logger.error(
-          `DUPLICATE_COMMAND`,
-          `Duplicate command ${commandObj.name}.`
-        );
-
-      if (!commandObj.run)
-        return logger.error(
-          `NO_FUNCTION`,
-          `The command ${commandObj.name} has no run function!`
-        );
-
-      client.commands.set(commandObj.name, commandObj);
+      try {
+        const commandObj: Command = new command(this);
+        if (commandObj && commandObj.cmdName) {
+          if (client.commands.has(commandObj.cmdName)) {
+            logger.error(
+              `DUPLICATE_COMMAND`,
+              `Duplicate command ${commandObj.cmdName}.`
+            );
+          } else client.commands.set(commandObj.cmdName, commandObj);
+        }
+      } catch (e) {}
     }
   }
 

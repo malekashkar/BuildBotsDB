@@ -9,7 +9,11 @@ export default class antiSpam {
   name = "message";
 
   async handle(client: Main, message: Message) {
-    if (message.author.bot || message.member.hasPermission("ADMINISTRATOR"))
+    if (
+      message.author.bot ||
+      !message.member ||
+      message.member.hasPermission("ADMINISTRATOR")
+    )
       return;
 
     const userData =

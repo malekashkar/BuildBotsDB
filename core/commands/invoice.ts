@@ -1,14 +1,14 @@
 import { Message } from "discord.js";
-import Command from "..";
-import Main from "../../..";
-import { DbGuild } from "../../models/guild";
-import { DbUser } from "../../models/user";
-import embeds from "../../utils/embeds";
+import Command from ".";
+import Main from "../..";
+import { DbGuild } from "../models/guild";
+import { DbUser } from "../models/user";
+import embeds from "../utils/embeds";
 
 export default class InvoiceCommand extends Command {
-  cmdName: "invoice";
-  description: "Create or delete invoices.";
-  groupName: "payments";
+  cmdName = "invoice";
+  description = "Create or delete invoices.";
+  groupName = "payments";
 
   async run(
     client: Main,
@@ -18,26 +18,45 @@ export default class InvoiceCommand extends Command {
     guildData: DbGuild,
     command: string
   ) {
-    console.log(this);
-    
-    const options = ["create"];
+    const options = Object.keys(this).filter(
+      (x) => typeof (this as any)[x] === "function"
+    );
     type Option = typeof options[number];
-    const option = args[0]
-      ? options.includes(args[0])
-        ? (args[0] as Option)
-        : null
-      : null;
+    const option = args[0] as Option;
+    if (!option)
+      return message.channel.send(
+        embeds.error(
+          `Please provide one of the following arguments: \`${options.join(
+            ", "
+          )}\``
+        )
+      );
 
-    (this as any)[option](client, message, args, userData, guildData, command);
+    try {
+      (this as any)[option](
+        client,
+        message,
+        args,
+        userData,
+        guildData,
+        command
+      );
+    } catch (e) {
+      message.channel.send(
+        embeds.error(
+          `\`${option}\` is not a \`${this.cmdName}\` command option.`
+        )
+      );
+    }
   }
 
-  async create(
+  create = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild
-  ) {
+  ) => {
     const gateways = ["paypal", "bitcoin", "g2a"] as const;
     const lowercaseArg = args[0].toLowerCase();
     const gateway = gateways.find((x) => lowercaseArg.includes(x));
@@ -66,5 +85,5 @@ export default class InvoiceCommand extends Command {
         `The **${gateway}** gateway has been set to \`${info}\`.`
       )
     );
-  }
+  };
 }

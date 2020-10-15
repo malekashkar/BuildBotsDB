@@ -5,7 +5,6 @@ export interface DbTicket extends Document {
   channelId: string;
   openedFor: string;
   claimMsg?: string;
-  closedBy?: string;
 }
 
 export const TicketSchema = new mongoose.Schema({
@@ -13,7 +12,6 @@ export const TicketSchema = new mongoose.Schema({
   channelId: { type: String, required: true, unique: true },
   openedFor: { type: String, required: true },
   claimMsg: { type: String, unique: true },
-  closedBy: { type: String, required: false },
 });
 
 export const TicketModel = mongoose.model<DbTicket>(`Ticket`, TicketSchema);

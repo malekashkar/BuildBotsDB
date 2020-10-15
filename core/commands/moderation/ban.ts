@@ -7,10 +7,10 @@ import ms from "ms";
 import { BanModel } from "../../models/ban";
 
 export default class BanCommand extends Command {
-  cmdName: "ban";
-  description: "Ban a user from your discord server.";
-  usage: "<@user>";
-  groupName: "moderation";
+  cmdName = "ban";
+  description = "Ban a user from your discord server.";
+  usage = "<@user>";
+  groupName = "moderation";
 
   async run(client: Main, message: Message, args: string[]) {
     const targetUser = message.mentions.members.first();

@@ -9,10 +9,7 @@ export default class ClearAllCommmand extends Command {
   description = "Clear all the mesasges in a specific channel.";
   groupName = "moderation";
 
-  async run(
-    client: Main,
-    message: Message,
-  ) {
+  async run(client: Main, message: Message) {
     const conf = await confirmation(
       `Clear All Messages`,
       `Are you sure you would like to clear this channel?`,
@@ -32,7 +29,7 @@ export default class ClearAllCommmand extends Command {
       });
       if (!messages.size) {
         saved = "0";
-        return message.channel.send(
+        message.channel.send(
           embeds.normal(
             `Clear All`,
             `The channel has been cleared by user ${message.author}`

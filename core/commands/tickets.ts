@@ -5,15 +5,15 @@ import {
   TextChannel,
   GuildChannel,
 } from "discord.js";
-import confirmation from "../../utils/confirmation";
-import Command from "..";
-import Main from "../../..";
-import { DbGuild } from "../../models/guild";
-import { DbUser } from "../../models/user";
-import embeds from "../../utils/embeds";
-import { TicketModel } from "../../models/ticket";
+import confirmation from "../utils/confirmation";
+import Command from ".";
+import Main from "../../";
+import { DbGuild } from "../models/guild";
+import { DbUser } from "../models/user";
+import embeds from "../utils/embeds";
+import { TicketModel } from "../models/ticket";
 
-export default class TicketCommand extends Command {
+export default class TicketsCommand extends Command {
   cmdName = "tickets";
   groupName = "tickets";
   description = "Run one of the ticket commands.";
@@ -26,27 +26,46 @@ export default class TicketCommand extends Command {
     guildData: DbGuild,
     command: string
   ) {
-    console.log(this);
-
-    const options = ["create"];
+    const options = Object.keys(this).filter(
+      (x) => typeof (this as any)[x] === "function"
+    );
     type Option = typeof options[number];
-    const option = args[0]
-      ? options.includes(args[0])
-        ? (args[0] as Option)
-        : null
-      : null;
+    const option = args[0] as Option;
+    if (!option)
+      return message.channel.send(
+        embeds.error(
+          `Please provide one of the following arguments: \`${options.join(
+            ", "
+          )}\``
+        )
+      );
 
-    (this as any)[option](client, message, args, userData, guildData, command);
+    try {
+      (this as any)[option](
+        client,
+        message,
+        args,
+        userData,
+        guildData,
+        command
+      );
+    } catch (e) {
+      message.channel.send(
+        embeds.error(
+          `\`${option}\` is not a \`${this.cmdName}\` command option.`
+        )
+      );
+    }
   }
 
-  async types(
+  types = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     if (!guildData.ticketTypes.length)
       return message.channel.send(
         embeds.error(`You don't have any ticket types created right now!`)
@@ -72,16 +91,16 @@ export default class TicketCommand extends Command {
       );
     }
     return message.channel.send(embed);
-  }
+  };
 
-  async setclaim(
+  setclaim = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const type = args[1];
     if (!type)
       return message.channel.send(
@@ -109,16 +128,16 @@ export default class TicketCommand extends Command {
         `The new claim channel for ticket type \`${type}\` is ${message.channel}`
       )
     );
-  }
+  };
 
-  async repost(
+  repost = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const type = args[1];
     if (!type)
       return message.channel.send(
@@ -160,16 +179,16 @@ export default class TicketCommand extends Command {
 
     typeData.panelMessageId = panelMsg.id;
     await guildData.save();
-  }
+  };
 
-  async remove(
+  remove = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const ticketData = await TicketModel.findOne({
       channelId: message.channel.id,
     });
@@ -197,16 +216,16 @@ export default class TicketCommand extends Command {
         `The user ${member} has been removed from the ticket.`
       )
     );
-  }
+  };
 
-  async joinmsg(
+  joinmsg = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const type = args[1];
     if (!type)
       return message.channel.send(
@@ -240,16 +259,16 @@ export default class TicketCommand extends Command {
         `The new join message for ticket type \`${type}\` is \`\`\`${joinMsg}\`\`\``
       )
     );
-  }
+  };
 
-  async delete(
+  delete = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const name = args[1];
     if (!name)
       return message.channel.send(
@@ -286,16 +305,16 @@ export default class TicketCommand extends Command {
         `The ticket type \`${name}\` has been deleted.`
       )
     );
-  }
+  };
 
-  async create(
+  create = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
     command: string
-  ) {
+  ) => {
     const name = args[1];
     if (!name)
       return message.channel.send(
@@ -346,21 +365,18 @@ export default class TicketCommand extends Command {
     );
 
     if (tempMsg.deletable) tempMsg.delete({ timeout: 7000 });
-  }
+  };
 
-  async close(
-    client: Main,
-    message: Message,
-    args: string[],
-    userData: DbUser,
-    guildData: DbGuild,
-    command: string
-  ) {
+  close = async (client: Main, message: Message) => {
     const ticketData = await TicketModel.findOne({
       channelId: message.channel.id,
     });
     if (!ticketData)
       return message.channel.send(`You may only do this in ticket channels!`);
+    else
+      await TicketModel.deleteOne({
+        channelId: message.channel.id,
+      });
 
     const conf = await confirmation(
       `Close Confirmation`,
@@ -376,9 +392,6 @@ export default class TicketCommand extends Command {
         )
       );
 
-    ticketData.closedBy = message.author.id;
-    await ticketData.save();
-
     message.channel.send(
       embeds.normal(`Warning`, `This ticket is closing in 10 seconds.`)
     );
@@ -389,16 +402,15 @@ export default class TicketCommand extends Command {
         channelId: message.channel.id,
       });
     }, 10 * 1000);
-  }
+  };
 
-  async category(
+  category = async (
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
-    guildData: DbGuild,
-    command: string
-  ) {
+    guildData: DbGuild
+  ) => {
     const type = args[1];
     if (!type)
       return message.channel.send(
@@ -445,16 +457,9 @@ export default class TicketCommand extends Command {
         `The ticket type \`${type}\` is not set to create tickets in the category \`${category.name}\`.`
       )
     );
-  }
+  };
 
-  async add(
-    client: Main,
-    message: Message,
-    args: string[],
-    userData: DbUser,
-    guildData: DbGuild,
-    command: string
-  ) {
+  add = async (client: Main, message: Message) => {
     const ticketData = await TicketModel.findOne({
       channelId: message.channel.id,
     });
@@ -487,5 +492,5 @@ export default class TicketCommand extends Command {
         `The user ${member} has been added to the ticket.`
       )
     );
-  }
+  };
 }
