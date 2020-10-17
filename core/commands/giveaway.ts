@@ -3,9 +3,8 @@ import Command from ".";
 import Main from "../..";
 import { DbGuild } from "../models/guild";
 import { DbUser } from "../models/user";
-import { DbGiveaways, GiveawayModel } from "../models/giveaway";
+import { GiveawayModel } from "../models/giveaway";
 import question from "../utils/question";
-import moment from "moment";
 import ms from "ms";
 import embeds from "../utils/embeds";
 import _ from "underscore";
@@ -55,14 +54,7 @@ export default class GiveawayCommand extends Command {
     }
   }
 
-  create = async (
-    client: Main,
-    message: Message,
-    args: string[],
-    userData: DbUser,
-    guildData: DbGuild,
-    command: string
-  ) => {
+  create = async (client: Main, message: Message) => {
     const channel = await getChannelQuestion(
       `Where would you like to post the giveaway?\n\`Please tag the channel.\``,
       message
@@ -106,14 +98,20 @@ export default class GiveawayCommand extends Command {
 
     const embed = new MessageEmbed()
       .setColor("RANDOM")
-      .setTitle(`${winners > 1 ? `x${winners} ` : ``}${prize}`)
-      .setDescription(`React with :tada: to enter this giveaway!`)
+      .setTitle(
+        `<:giveaway:765595890554896384> ${
+          winners > 1 ? `x${winners} ` : ``
+        }${prize}`
+      )
+      .setDescription(
+        `<:desc:765597022505402418> React with :tada: to enter this giveaway!`
+      )
       .addField(
-        `Ending Time`,
-        moment(Date.now() + ms(time)).format("LLL"),
+        `Time Left`,
+        `<:timer:765595933027074070> **${ms(ms(time))}**`,
         true
       )
-      .addField(`Winners`, winners, true)
+      .addField(`Winners`, `<:winner:765597646433026108> **${winners}**`, true)
       .setFooter(`Ends at`)
       .setTimestamp(Date.now() + ms(time));
 
@@ -130,15 +128,16 @@ export default class GiveawayCommand extends Command {
             ? ``
             : `Required Roles:` + requiredRoles.map((x) => `<@&${x}>`)
         }
-         ${requiredInvites ? `Required Invites: ${requiredInvites}` : ``}\n
-        ${
-          !requiredGuilds.length
-            ? `Required Guilds:` +
-              requiredGuilds
-                .map((x: string) => client.guilds.resolve(x).name)
-                .join(", ")
-            : ``
-        }\n${requiredMessages ? `Required Messages: ${requiredMessages}` : ``}`,
+       ${requiredInvites ? `Required Invites: ${requiredInvites}\n` : ``}
+      ${
+        !requiredGuilds.length
+          ? `Required Guilds:` +
+            requiredGuilds
+              .map((x: string) => client.guilds.resolve(x).name)
+              .join(", ") +
+            `\n`
+          : ``
+      }${requiredMessages ? `Required Messages: ${requiredMessages}\n` : ``}`,
         true
       );
     }
@@ -149,9 +148,9 @@ export default class GiveawayCommand extends Command {
     GiveawayModel.create({
       status: "pending",
       prize,
-      startTime: Date.now(),
       endTime: Date.now() + ms(time),
       winners,
+      guildId: giveawayMsg.guild.id,
       messageId: giveawayMsg.id,
       channelId: giveawayMsg.channel.id,
       condition: {
@@ -163,14 +162,7 @@ export default class GiveawayCommand extends Command {
     });
   };
 
-  edit = async (
-    client: Main,
-    message: Message,
-    args: string[],
-    userData: DbUser,
-    guildData: DbGuild,
-    command: string
-  ) => {
+  edit = async (client: Main, message: Message, args: string[]) => {
     const messageId = args[1];
     const giveawayData = await GiveawayModel.findOne({ messageId });
     if (!messageId || !giveawayData)
@@ -235,14 +227,20 @@ export default class GiveawayCommand extends Command {
 
     const embed = new MessageEmbed()
       .setColor("RANDOM")
-      .setTitle(`${winners > 1 ? `x${winners} ` : ``}${prize}`)
-      .setDescription(`React with :tada: to enter this giveaway!`)
+      .setTitle(
+        `<:giveaway:765595890554896384> ${
+          winners > 1 ? `x${winners} ` : ``
+        }${prize}`
+      )
+      .setDescription(
+        `<:desc:765597022505402418> React with :tada: to enter this giveaway!`
+      )
       .addField(
-        `Ending Time`,
-        moment(Date.now() + ms(time)).format("LLL"),
+        `Time Left`,
+        `<:timer:765595933027074070> **${ms(ms(time))}**`,
         true
       )
-      .addField(`Winners`, winners, true)
+      .addField(`Winners`, `<:winner:765597646433026108> **${winners}**`, true)
       .setFooter(`Ends at`)
       .setTimestamp(Date.now() + ms(time));
 
@@ -259,22 +257,22 @@ export default class GiveawayCommand extends Command {
             ? ``
             : `Required Roles:` + requiredRoles.map((x) => `<@&${x}>`)
         }
-         ${requiredInvites ? `Required Invites: ${requiredInvites}` : ``}\n
-        ${
-          !requiredGuilds.length
-            ? `Required Guilds:` +
-              requiredGuilds
-                .map((x: string) => client.guilds.resolve(x).name)
-                .join(", ")
-            : ``
-        }\n${requiredMessages ? `Required Messages: ${requiredMessages}` : ``}`,
+       ${requiredInvites ? `Required Invites: ${requiredInvites}\n` : ``}
+      ${
+        !requiredGuilds.length
+          ? `Required Guilds:` +
+            requiredGuilds
+              .map((x: string) => client.guilds.resolve(x).name)
+              .join(", ") +
+            `\n`
+          : ``
+      }${requiredMessages ? `Required Messages: ${requiredMessages}\n` : ``}`,
         true
       );
     }
 
     giveawayMessage.edit(embed);
     giveawayData.prize = prize;
-    giveawayData.startTime = Date.now();
     giveawayData.endTime = Date.now() + ms(time);
     giveawayData.winners = winners;
     giveawayData.condition = {
@@ -295,10 +293,10 @@ export default class GiveawayCommand extends Command {
     finalMsg.delete({ timeout: 10 * 1000 });
   };
 
-  test = async (client: Main, message: Message, args: string[]) => {
+  test = async (client: Main, message: Message) => {
     const winners = 1;
     const prize = `testing`;
-    const time = `10s`;
+    const time = `50s`;
     const requiredRoles: string[] = [];
     const requiredGuilds: string[] = [];
     const requiredInvites = 0;
@@ -306,14 +304,20 @@ export default class GiveawayCommand extends Command {
 
     const embed = new MessageEmbed()
       .setColor("RANDOM")
-      .setTitle(`${winners > 1 ? `x${winners} ` : ``}${prize}`)
-      .setDescription(`React with :tada: to enter this giveaway!`)
+      .setTitle(
+        `<:giveaway:765595890554896384> ${
+          winners > 1 ? `x${winners} ` : ``
+        }${prize}`
+      )
+      .setDescription(
+        `<:desc:765597022505402418> React with :tada: to enter this giveaway!`
+      )
       .addField(
-        `Ending Time`,
-        moment(Date.now() + ms(time)).format("LLL"),
+        `Time Left`,
+        `<:timer:765595933027074070> **${ms(ms(time))}**`,
         true
       )
-      .addField(`Winners`, winners, true)
+      .addField(`Winners`, `<:winner:765597646433026108> **${winners}**`, true)
       .setFooter(`Ends at`)
       .setTimestamp(Date.now() + ms(time));
 
@@ -330,15 +334,16 @@ export default class GiveawayCommand extends Command {
             ? ``
             : `Required Roles:` + requiredRoles.map((x) => `<@&${x}>`)
         }
-       ${requiredInvites ? `Required Invites: ${requiredInvites}` : ``}\n
+       ${requiredInvites ? `Required Invites: ${requiredInvites}\n` : ``}
       ${
         !requiredGuilds.length
           ? `Required Guilds:` +
             requiredGuilds
               .map((x: string) => client.guilds.resolve(x).name)
-              .join(", ")
+              .join(", ") +
+            `\n`
           : ``
-      }\n${requiredMessages ? `Required Messages: ${requiredMessages}` : ``}`,
+      }${requiredMessages ? `Required Messages: ${requiredMessages}\n` : ``}`,
         true
       );
     }
@@ -349,11 +354,11 @@ export default class GiveawayCommand extends Command {
     GiveawayModel.create({
       status: "pending",
       prize,
-      startTime: Date.now(),
       endTime: Date.now() + ms(time),
       winners,
       messageId: giveawayMsg.id,
       channelId: giveawayMsg.channel.id,
+      guildId: giveawayMsg.guild.id,
       condition: {
         requiredRoles,
         requiredInvites,
@@ -541,8 +546,7 @@ export default class GiveawayCommand extends Command {
     message: Message,
     args: string[],
     userData: DbUser,
-    guildData: DbGuild,
-    command: string
+    guildData: DbGuild
   ) => {
     const user = message.mentions.users.first();
     if (!user)

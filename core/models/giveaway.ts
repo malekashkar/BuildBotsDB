@@ -3,11 +3,11 @@ import mongoose, { Document } from "mongoose";
 export interface DbGiveaways extends Document {
   status: string;
   prize: string;
-  startTime: number;
   endTime: number;
   winners: number;
   messageId: string;
   channelId: string;
+  guildId: string;
   condition: {
     requiredRoles: string[];
     requiredInvites: number;
@@ -19,11 +19,11 @@ export interface DbGiveaways extends Document {
 export const GiveawaySchema = new mongoose.Schema({
   status: String,
   prize: String,
-  startTime: Number,
   endTime: Number,
   winners: Number,
   messageId: { type: String, unique: true },
   channelId: String,
+  guildId: String,
   condition: {
     requiredRoles: [String],
     requiredInvites: Number,
@@ -32,4 +32,7 @@ export const GiveawaySchema = new mongoose.Schema({
   },
 });
 
-export const GiveawayModel = mongoose.model<DbGiveaways>(`Giveaway`, GiveawaySchema);
+export const GiveawayModel = mongoose.model<DbGiveaways>(
+  `Giveaway`,
+  GiveawaySchema
+);

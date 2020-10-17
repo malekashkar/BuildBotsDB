@@ -16,7 +16,7 @@ export default class createOrder extends Event {
     if (!embed) return;
 
     const guildData = await GuildModel.findOne({
-      _id: message.guild.id,
+      guildId: message.guild.id,
     });
     if (!guildData) return;
   }

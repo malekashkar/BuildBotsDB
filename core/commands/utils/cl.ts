@@ -7,7 +7,7 @@ export default class ClCommand extends Command {
   cmdName = "cl";
   description = "Create a change-log update.";
   usage = "<update amt> <title>";
-  groupName = "utils";
+  groupName = "utility";
 
   async run(
     client: Main,

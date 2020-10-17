@@ -16,7 +16,7 @@ export default class claimTickets extends Event {
 
     const message = reaction.message;
 
-    const settings = await GuildModel.findById(message.guild.id);
+    const settings = await GuildModel.findOne({ guildId: message.guild.id });
     if (!settings) return;
 
     const ticketData = await TicketModel.findOne({

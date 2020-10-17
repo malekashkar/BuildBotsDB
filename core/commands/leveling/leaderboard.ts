@@ -8,7 +8,7 @@ import { UserModel } from "../../models/user";
 export default class Commmand extends Command {
   cmdName = "leaderboard";
   description = "Check the leaderboard for users with most xp.";
-  groupName = "leveling";
+  groupName = "levels";
 
   async run(client: Main, message: Message) {
     try {
@@ -25,26 +25,26 @@ export default class Commmand extends Command {
       const condition = members.length > 9 ? 9 : members.length - 1;
 
       for (let i = 0; i <= condition; ++i) {
-        if (!guild.members.cache.get(members[i].id)) continue;
+        if (!guild.members.cache.get(members[i].userId)) continue;
 
         membersLimited.push([
           `${this.getEmoji(i)} ${this.compute_number(i + 1)}`,
           this.validateUsername(
-            guild.members.cache.get(members[i].id).user.username
+            guild.members.cache.get(members[i].userId).user.username
           ),
           members[i].leveling.xp.toString(),
         ]);
       }
 
       let index = members.findIndex(
-        (member) => member.id === message.member.id
+        (member) => member.userId === message.member.id
       );
 
       if (index > 9) {
         membersLimited.push([
           this.compute_number(index + 1),
           this.validateUsername(
-            guild.members.cache.get(members[index].id).user.username
+            guild.members.cache.get(members[index].userId).user.username
           ),
           members[index].leveling.xp.toString(),
         ]);

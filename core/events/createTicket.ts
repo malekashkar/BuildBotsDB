@@ -19,7 +19,7 @@ export default class createTicket extends Event {
     const message = reaction.message;
     reaction.users.remove(user);
 
-    const settings = await GuildModel.findById(message.guild.id);
+    const settings = await GuildModel.findOne({ guildId: message.guild.id });
     if (!settings) return;
 
     const tickets = await TicketModel.find({

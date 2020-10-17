@@ -1,7 +1,7 @@
 import mongoose, { Document } from "mongoose";
 
 export interface DbGuild extends Document {
-  _id: string;
+  guildId: string;
   prefix: string;
   roles?: {
     mute: string;
@@ -53,7 +53,7 @@ interface giveaways {
 }
 
 export const GuildSchema = new mongoose.Schema({
-  _id: { type: String, required: true },
+  guildId: { type: String, required: true },
   prefix: { type: String, required: true, default: "!" },
   roles: {
     mute: { type: String, default: "Muted" },

@@ -16,9 +16,9 @@ export default class commandHandler extends Event {
       if (!message.guild || !message.author || message.author.bot) return;
 
       const guildData =
-        (await GuildModel.findById(message.guild.id)) ||
+        (await GuildModel.findOne({ guildId: message.guild.id })) ||
         new GuildModel({
-          _id: message.guild.id,
+          guildId: message.guild.id,
         });
 
       const userData =
@@ -64,14 +64,18 @@ export default class commandHandler extends Event {
         for (const commandObj of client.commands.array()) {
           if (commandObj.disabled) continue;
           if (commandObj.cmdName.toLowerCase() === command) {
-            commandObj.run(
-              client,
-              message,
-              args,
-              userData,
-              guildData,
-              commandObj.cmdName
-            );
+            commandObj
+              .run(
+                client,
+                message,
+                args,
+                userData,
+                guildData,
+                commandObj.cmdName
+              )
+              .catch((err) =>
+                logger.error(`${command.toUpperCase()}_ERROR`, err)
+              );
           }
         }
       } catch (err) {

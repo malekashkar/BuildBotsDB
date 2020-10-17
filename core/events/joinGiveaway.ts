@@ -19,7 +19,7 @@ export default class joinGiveaway extends Event {
     const message = reaction.message;
     const member = message.guild.members.resolve(user.id);
 
-    const guldData = await GuildModel.findById(message.guild.id);
+    const guldData = await GuildModel.findOne({ guildId: message.guild.id });
     if (!guldData) return;
 
     const userData =

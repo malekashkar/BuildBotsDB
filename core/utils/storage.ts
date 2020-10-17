@@ -69,3 +69,18 @@ export const badWords: string[] = [
   "kys",
   "dick",
 ];
+
+export type GroupEmojisType = {
+  [name: string]: string;
+};
+export const groupEmojis: GroupEmojisType = {
+  moderation: "🛡️",
+  giveaways: "🎁",
+  invites: "🔗",
+  payments: "💰",
+  commissioner: "🤝",
+  music: "🎵",
+  tickets: "🎫",
+  utility: "⚙️",
+  levels: "⬆️",
+};

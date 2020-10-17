@@ -28,7 +28,7 @@ export default class removeInvites extends Event {
       userJoinedId: member.id,
     });
 
-    const guildData = await GuildModel.findById(member.guild.id);
+    const guildData = await GuildModel.findOne({ guildId: member.guild.id });
     if (!guildData) return;
     const guild = client.guilds.resolve(guildData._id);
 

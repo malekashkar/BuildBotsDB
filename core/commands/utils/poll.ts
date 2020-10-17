@@ -8,7 +8,7 @@ export default class PollCommmand extends Command {
   cmdName = "poll";
   description = "Create a poll for users to vote on.";
   usage = "<option amt> <question>";
-  groupName = "utils";
+  groupName = "utility";
 
   async run(client: Main, message: Message, args: string[]) {
     const amount = args[0]

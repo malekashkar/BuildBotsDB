@@ -15,8 +15,8 @@ import { TicketModel } from "../models/ticket";
 
 export default class TicketsCommand extends Command {
   cmdName = "tickets";
-  groupName = "tickets";
   description = "Run one of the ticket commands.";
+  groupName = "tickets";
 
   async run(
     client: Main,
