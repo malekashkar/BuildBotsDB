@@ -1,6 +1,7 @@
+import Event from ".";
 import Main from "../../";
 
-export default class createGuildInvites {
+export default class createGuildInvites extends Event {
   name = "ready";
 
   async handle(client: Main) {

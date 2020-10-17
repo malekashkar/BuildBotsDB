@@ -4,8 +4,9 @@ import placeholders from "../utils/placeholders";
 import { GuildMember, TextChannel } from "discord.js";
 import { InviteModel } from "../models/invite";
 import { GuildModel } from "../models/guild";
+import Event from ".";
 
-export default class removeInvites {
+export default class removeInvites extends Event {
   name: "guildMemberRemove";
 
   async handle(client: Main, member: GuildMember) {

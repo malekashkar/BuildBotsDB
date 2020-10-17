@@ -6,8 +6,9 @@ import { MessageReaction, TextChannel, User } from "discord.js";
 import { MessageEmbed } from "discord.js";
 import { GuildModel } from "../models/guild";
 import { TicketModel } from "../models/ticket";
+import Event from ".";
 
-export default class createTicket {
+export default class createTicket extends Event {
   name = "messageReactionAdd";
 
   async handle(client: Main, reaction: MessageReaction, user: User) {
@@ -31,7 +32,7 @@ export default class createTicket {
     );
     if (!typeData) return;
 
-      console.log(user.id)
+    console.log(user.id);
 
     const channel = await message.guild.channels.create(
       `${user.username}-ticket`,

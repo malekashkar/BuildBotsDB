@@ -6,8 +6,9 @@ import logger from "../utils/logger";
 import { Message } from "discord.js";
 import { GuildModel } from "../models/guild";
 import { UserModel } from "../models/user";
+import Event from ".";
 
-export default class commandHandler {
+export default class commandHandler extends Event {
   name = "message";
 
   async handle(client: Main, message: Message) {
@@ -49,13 +50,15 @@ export default class commandHandler {
       const commandObj = client.commands.find(
         (x: Command) => x.cmdName === command
       );
-      if (!commandObj)
-        return message.channel.send(
+      if (!commandObj) {
+        message.channel.send(
           embeds.error(
             `The command \`${command}\` does not exist!`,
             `Invalid Command`
           )
         );
+        return;
+      }
 
       try {
         for (const commandObj of client.commands.array()) {

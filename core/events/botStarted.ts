@@ -1,7 +1,7 @@
 import Main from "../../";
 import logger from "../utils/logger";
-
-export default class botStarted {
+import Event from ".";
+export default class botStarted extends Event {
   name = "ready";
 
   async handle(client: Main) {

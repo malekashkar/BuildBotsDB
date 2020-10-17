@@ -1,11 +1,12 @@
 import Main from "../../";
 import embeds from "../utils/embeds";
+import Event from ".";
 
 import { Message } from "discord.js";
 import { badWords, linkParts } from "../utils/storage";
 import { UserModel } from "../models/user";
 
-export default class antiSpam {
+export default class antiSpam extends Event {
   name = "message";
 
   async handle(client: Main, message: Message) {
@@ -39,12 +40,13 @@ export default class antiSpam {
       };
       await userData.save();
 
-      return message.channel.send(
+      message.channel.send(
         embeds.normal(
           `Message Spam`,
           `Please do not spam the same message over and over again!`
         )
       );
+      return;
     } else if (message.content === userData.messages.lastMessage) {
       userData.messages = {
         lastMessage: message.content,
@@ -72,28 +74,31 @@ export default class antiSpam {
 
     if (emojis && customEmojis && emojis.length + customEmojis.length >= 10) {
       if (message.deletable) message.delete();
-      return message.channel.send(
+      message.channel.send(
         embeds.normal(
           `Spam Detected`,
           `Please do not use 10 or more emojis in one message!`
         )
       );
+      return;
     } else if (cursing.length) {
       if (message.deletable) message.delete();
-      return message.channel.send(
+      message.channel.send(
         embeds.normal(
           `Swear Detected`,
           `Please do not use the ||${cursing.join(" ")}|| word(s).`
         )
       );
+      return;
     } else if (invites.length) {
       if (message.deletable) message.delete();
-      return message.channel.send(
+      message.channel.send(
         embeds.normal(
           `Link Detected`,
           `Please to not post links in this server.`
         )
       );
+      return;
     }
 
     let consecutiveCaps = 0;
@@ -104,12 +109,13 @@ export default class antiSpam {
         message.content.charAt(i) === message.content.charAt(i).toUpperCase()
       ) {
         if (message.deletable) message.delete();
-        return message.channel.send(
+        message.channel.send(
           embeds.normal(
             `Spam Detected`,
             `Please don't use three consecutive caps in a message!`
           )
         );
+        return;
       } else if (
         message.content.charAt(i) !== " " &&
         message.content.charAt(i) === message.content.charAt(i).toUpperCase()

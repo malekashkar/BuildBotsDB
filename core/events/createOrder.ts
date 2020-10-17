@@ -1,8 +1,9 @@
-import { Message, MessageReaction, User } from "discord.js";
+import { MessageReaction, User } from "discord.js";
+import Event from ".";
 import Main from "../..";
 import { GuildModel } from "../models/guild";
 
-export default class createOrder {
+export default class createOrder extends Event {
   name = "messageReactionAdd";
 
   async handle(client: Main, reaction: MessageReaction, user: User) {
@@ -18,7 +19,5 @@ export default class createOrder {
       _id: message.guild.id,
     });
     if (!guildData) return;
-
-    
   }
 }

@@ -16,6 +16,9 @@ export default class Main extends Client {
           name: `${settings.name} | Try out ${settings.prefix}help`,
         },
       },
+      ws: {
+        intents: ["GUILD_MEMBERS", "GUILD_MESSAGES", "GUILD_MESSAGE_REACTIONS"],
+      },
     });
   }
 }

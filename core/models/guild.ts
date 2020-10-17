@@ -49,22 +49,7 @@ interface IPayments {
 
 interface giveaways {
   bypassRoles: string[];
-  giveawayList: giveawayList[];
-}
-
-interface giveawayList {
-  prize: string;
-  startTime: number;
-  endTime: number;
-  winners: number;
-  messageId: string;
-  channelId: string;
-  condition: {
-    requiredRoles: string[];
-    requiredInvites: number;
-    requiredGuilds: string[];
-    requiredMessages: number;
-  };
+  adminUsers: string[];
 }
 
 export const GuildSchema = new mongoose.Schema({
@@ -121,22 +106,7 @@ export const GuildSchema = new mongoose.Schema({
   },
   giveaways: {
     bypassRoles: [String],
-    giveawayList: [
-      {
-        prize: String,
-        startTime: Number,
-        endTime: Number,
-        winners: Number,
-        messageId: String,
-        channelId: String,
-        condition: {
-          requiredRoles: [String],
-          requiredInvites: Number,
-          requiredGuilds: [String],
-          requiredMessages: Number,
-        },
-      },
-    ],
+    adminUsers: [String],
   },
   createOrder: {
     messageId: String,

@@ -2,8 +2,9 @@ import Main from "../../";
 
 import { Message } from "discord.js";
 import { UserModel } from "../models/user";
+import Event from ".";
 
-export default class levels {
+export default class levels extends Event {
   name = "message";
 
   async handle(client: Main, message: Message) {

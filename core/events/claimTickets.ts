@@ -1,18 +1,15 @@
 import Main from "../../";
 import embeds from "../utils/embeds";
+import Event from ".";
 
 import { MessageReaction, TextChannel, User } from "discord.js";
 import { GuildModel } from "../models/guild";
 import { TicketModel } from "../models/ticket";
 
-export default class claimTickets {
+export default class claimTickets extends Event {
   name = "messageReactionAdd";
 
-  async handle(
-    client: Main,
-    reaction: MessageReaction,
-    user: User
-  ) {
+  async handle(client: Main, reaction: MessageReaction, user: User) {
     if (user.bot) return;
     if (reaction.message.partial) reaction.message.fetch();
     if (reaction.emoji.name !== "✅") return;
@@ -43,14 +40,16 @@ export default class claimTickets {
     const ticketChannel = client.channels.resolve(
       ticketData.channelId
     ) as TextChannel;
-    if (!ticketChannel)
-      return await user
+    if (!ticketChannel) {
+      await user
         .send(
           embeds.error(
             `The ticket channel you just claimed seemed to be deleted.`
           )
         )
         .catch((e) => console.error);
+      return;
+    }
 
     ticketChannel.send(
       embeds.normal(
