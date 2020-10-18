@@ -11,6 +11,7 @@ export default class UnbanCommand extends Command {
   description = "Unban a user from the discord server.";
   usage: "<user>";
   groupName = "moderation";
+  permissions = ["ADMIN"];
 
   async run(
     client: Main,

@@ -7,6 +7,7 @@ export default class FeedbackCommmand extends Command {
   cmdName = "feedback";
   description = "Create a message on your server to receive feedback.";
   groupName = "utility";
+  permissions = ["ADMIN"];
 
   async run(client: Main, message: Message) {
     const msg = await message.channel.send(

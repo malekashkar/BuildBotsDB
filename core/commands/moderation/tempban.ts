@@ -13,6 +13,7 @@ export default class TempBanCommand extends Command {
   description = "Temporarily ban a user from the discord server.";
   usage: "<@user> <time>";
   groupName = "moderation";
+  permissions = ["ADMIN"];
 
   async run(
     client: Main,

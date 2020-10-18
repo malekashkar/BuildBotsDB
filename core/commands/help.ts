@@ -40,15 +40,18 @@ export default class HelpCommand extends Command {
     }
 
     const groups: string[] = Array.from(help).map(([name, value]) => name);
+    const fields = groups.map((name: string) => {
+      return {
+        name: `**${name}** commands`,
+        value: `*react with ${groupEmojis[name.toLowerCase()]} to view*`,
+        inline: true,
+      };
+    });
 
     if (!args[0]) {
       const helpMessage = await message.channel.send(
         new MessageEmbed()
-          .setDescription(
-            groups.map(
-              (name: string) => `${groupEmojis[name.toLowerCase()]} **${name}**`
-            )
-          )
+          .addFields(fields)
           .setTitle(`Help Menu`)
           .setColor("RANDOM")
           .setFooter(`Build A Bot v1.0`)
@@ -81,7 +84,10 @@ export default class HelpCommand extends Command {
 
           helpMessage.reactions.removeAll();
           helpMessage.edit(
-            helpMessage.embeds[0]
+            new MessageEmbed()
+              .setColor("RANDOM")
+              .setFooter(`Build A Bot v1.0`)
+              .setTimestamp()
               .setTitle(categoryName + ` | Commands Info`)
               .setDescription(description)
           );

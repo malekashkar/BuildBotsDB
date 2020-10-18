@@ -19,3 +19,18 @@ export default abstract class Command {
     _command?: string
   ): Promise<Message | void>;
 }
+
+export function checkPermission(message: Message, permission: string) {
+  if (
+    permission.toLowerCase().includes("admin") &&
+    !message.member.permissions.has("ADMINISTRATOR")
+  )
+    return false;
+  if (
+    permission.toLowerCase().includes("owner") &&
+    message.member.guild.owner !== message.member
+  )
+    return false;
+
+  return true;
+}

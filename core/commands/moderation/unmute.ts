@@ -10,6 +10,7 @@ export default class UnmuteCommand extends Command {
   description = "Unmute a user which gives them back their access to speaking.";
   usage: "<@user>";
   groupName = "moderation";
+  permissions = ["ADMIN"];
 
   async run(
     client: Main,

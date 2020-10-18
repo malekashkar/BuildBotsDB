@@ -8,12 +8,9 @@ export default class ClCommand extends Command {
   description = "Create a change-log update.";
   usage = "<update amt> <title>";
   groupName = "utility";
+  permissions = ["ADMIN"];
 
-  async run(
-    client: Main,
-    message: Message,
-    args: string[],
-  ) {
+  async run(client: Main, message: Message, args: string[]) {
     const amount = args[0]
       ? !isNaN(parseInt(args[0])) && parseInt(args[0]) < 24
         ? parseInt(args[0])

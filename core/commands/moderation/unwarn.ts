@@ -10,6 +10,7 @@ export default class UnwarnCommand extends Command {
   description = "Remove a users last warning.";
   usage: "<@user>";
   groupName = "moderation";
+  permissions = ["ADMIN"];
 
   async run(
     client: Main,

@@ -11,6 +11,7 @@ export default class WarnCommand extends Command {
   description = "Give a user a warning.";
   usage: "<@user> [reason]";
   groupName = "moderation";
+  permissions = ["ADMIN"];
 
   async run(
     client: Main,

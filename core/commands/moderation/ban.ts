@@ -11,6 +11,7 @@ export default class BanCommand extends Command {
   description = "Ban a user from your discord server.";
   usage = "<@user>";
   groupName = "moderation";
+  permissions = ["ADMIN"];
 
   async run(client: Main, message: Message, args: string[]) {
     const targetUser = message.mentions.members.first();

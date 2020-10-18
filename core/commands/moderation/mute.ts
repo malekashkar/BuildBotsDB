@@ -12,6 +12,7 @@ export default class ClearAllCommmand extends Command {
   description = "Mute a user preventing them from talking anywhere.";
   usage: "<@user> [time]";
   groupName = "moderation";
+  permissions = ["ADMIN"];
 
   async run(
     client: Main,

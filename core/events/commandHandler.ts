@@ -32,20 +32,35 @@ export default class commandHandler extends Event {
       userData.totalMessages += 1;
       await userData.save();
 
-      const prefixRegex = new RegExp(
-        `^${guildData.prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`
-      );
-      const prefixMatch = message.content.match(prefixRegex);
-
-      const prefix = prefixMatch ? prefixMatch[0] : null;
+      const prefix = guildData.prefix;
       if (!prefix || message.content.indexOf(prefix) !== 0) return;
 
-      const args = message.content
+      let args = message.content
         .slice(prefix.length)
         .trim()
         .replace(/ /g, "\n")
         .split(/\n+/g);
-      const command = args.shift().toLowerCase();
+      if (!args) return;
+
+      const cmdName = args.join(" ")?.toLowerCase();
+      if (!cmdName) return;
+
+      const command = client.commands
+        .array()
+        .find((commandObj) =>
+          cmdName.startsWith(commandObj.cmdName.toLowerCase())
+        ).cmdName;
+      if (!command) {
+        message.channel.send(
+          embeds.error(
+            `No command was found in the message \`${message.content}\`!`,
+            `Invalid Command`
+          )
+        );
+        return;
+      }
+
+      args = args.join(" ").slice(command.length).trim().split(" ");
 
       const commandObj = client.commands.find(
         (x: Command) => x.cmdName === command
