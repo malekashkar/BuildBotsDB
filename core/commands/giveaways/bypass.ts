@@ -9,7 +9,7 @@ export default class GiveawayBypassCommand extends Command {
   cmdName = "giveaways bypass";
   description = "Give a role access to admin giveaway commands.";
   groupName = "giveaways";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
   
   async run(
     client: Main,

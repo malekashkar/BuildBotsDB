@@ -11,15 +11,14 @@ export default class WarnCommand extends Command {
   description = "Give a user a warning.";
   usage: "<@user> [reason]";
   groupName = "moderation";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
-    guildData: DbGuild,
-    command: string
+    guildData: DbGuild
   ) {
     const targetUser = message.mentions.members.first();
     if (!targetUser)

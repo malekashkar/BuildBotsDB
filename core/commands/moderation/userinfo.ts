@@ -17,8 +17,6 @@ export default class UserinfoCommand extends Command {
     message: Message,
     args: string[],
     userData: DbUser,
-    guildData: DbGuild,
-    command: string
   ) {
     let targetUser = message.mentions.members.first();
     if (!targetUser) targetUser = message.member;

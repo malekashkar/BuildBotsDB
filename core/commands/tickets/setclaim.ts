@@ -9,7 +9,7 @@ export default class TicketsCommand extends Command {
   cmdName = "ticket setclaim";
   description = "Set the claim channel for a specific ticket type.";
   groupName = "tickets";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

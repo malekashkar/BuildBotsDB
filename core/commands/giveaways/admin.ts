@@ -9,7 +9,7 @@ export default class GiveawayAdminCommand extends Command {
   cmdName = "giveaways admin";
   description = "Give a user access to admin giveaway commands.";
   groupName = "giveaways";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
   
   async run(
     client: Main,

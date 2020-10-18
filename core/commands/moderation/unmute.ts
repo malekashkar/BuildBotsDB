@@ -10,7 +10,7 @@ export default class UnmuteCommand extends Command {
   description = "Unmute a user which gives them back their access to speaking.";
   usage: "<@user>";
   groupName = "moderation";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,
@@ -18,7 +18,6 @@ export default class UnmuteCommand extends Command {
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
-    command: string
   ) {
     const targetUser = message.mentions.members.first();
     if (!targetUser)

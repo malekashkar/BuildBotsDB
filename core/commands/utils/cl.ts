@@ -8,7 +8,7 @@ export default class ClCommand extends Command {
   description = "Create a change-log update.";
   usage = "<update amt> <title>";
   groupName = "utility";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(client: Main, message: Message, args: string[]) {
     const amount = args[0]

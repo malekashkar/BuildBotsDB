@@ -9,7 +9,7 @@ export default class InvitesJoinChannelCommand extends Command {
   cmdName = "invites joinchannel";
   description = "Set the server join message channel.";
   groupName = "invites";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

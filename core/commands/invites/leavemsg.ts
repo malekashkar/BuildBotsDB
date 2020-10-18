@@ -9,7 +9,7 @@ export default class InvitesLeaveMessageCommand extends Command {
   cmdName = "invites leavemsg";
   description = "Set the server leave message.";
   groupName = "invites";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

@@ -9,7 +9,7 @@ export default class InvitesJoinMessageCommand extends Command {
   cmdName = "invites joinmsg";
   description = "Set the server join message.";
   groupName = "invites";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

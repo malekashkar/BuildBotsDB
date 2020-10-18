@@ -8,7 +8,7 @@ export default class ClearAllCommmand extends Command {
   cmdName = "clearall";
   description = "Clear all the mesasges in a specific channel.";
   groupName = "moderation";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(client: Main, message: Message) {
     const conf = await confirmation(

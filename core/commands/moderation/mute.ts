@@ -12,7 +12,7 @@ export default class ClearAllCommmand extends Command {
   description = "Mute a user preventing them from talking anywhere.";
   usage: "<@user> [time]";
   groupName = "moderation";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,
@@ -20,7 +20,6 @@ export default class ClearAllCommmand extends Command {
     args: string[],
     userData: DbUser,
     guildData: DbGuild,
-    command: string
   ) {
     const targetUser = message.mentions.members.first();
     if (!targetUser)

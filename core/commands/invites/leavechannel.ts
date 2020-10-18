@@ -9,7 +9,7 @@ export default class InvitesLeaveChannelCommand extends Command {
   cmdName = "invites leavechannel";
   description = "Set the server leave message channel.";
   groupName = "invites";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

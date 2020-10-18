@@ -8,7 +8,7 @@ export default class ClearAllCommmand extends Command {
   description = "Kick a user from the discord server.";
   usage: "<@user>";
   groupName = "moderation";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(client: Main, message: Message) {
     const targetUser = message.mentions.members.first();

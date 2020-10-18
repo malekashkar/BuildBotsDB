@@ -10,7 +10,7 @@ export default class CreateOrderMessage extends Command {
   cmdName = "ordermessage";
   description = "Create the order message";
   groupName = "createBot";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

@@ -10,7 +10,7 @@ export default class EditGiveawayCommand extends Command {
   cmdName = "giveaways edit";
   description = "Edit a giveaway to new settings.";
   groupName = "giveaways";
-  permissions = ["GIVEAWAY"];
+  permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {
     const messageId = args[1];

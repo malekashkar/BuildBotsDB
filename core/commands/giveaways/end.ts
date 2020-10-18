@@ -9,7 +9,7 @@ export default class GiveawayEndCommand extends Command {
   cmdName = "giveaways end";
   description = "End a currently running giveaway, and pick winners.";
   groupName = "giveaways";
-  permissions = ["GIVEAWAY"];
+  permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {
     const messageId = args[1];

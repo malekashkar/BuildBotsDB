@@ -9,7 +9,7 @@ export default class GiveawayCreateCommand extends Command {
   cmdName = "giveaways create";
   description = "Create a new giveaway";
   groupName = "giveaways";
-  permissions = ["GIVEAWAY"];
+  permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {
     const channel = await getChannelQuestion(

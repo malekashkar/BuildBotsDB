@@ -8,7 +8,7 @@ export default class GiveawayStopCommand extends Command {
   cmdName = "giveaways stop";
   description = "Stop one of the currently active giveaways, and don't pick winners.";
   groupName = "giveaways";
-  permissions = ["GIVEAWAY"];
+  permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {
     const messageId = args[1];

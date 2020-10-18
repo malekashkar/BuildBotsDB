@@ -8,7 +8,7 @@ export default class TestGiveawayCommand extends Command {
   cmdName = "giveaways test";
   description = "Send the giveaway test.";
   groupName = "giveaways";
-  permissions = ["GIVEAWAY"];
+  permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {
     const winners = 1;

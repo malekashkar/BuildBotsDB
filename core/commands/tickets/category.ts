@@ -9,7 +9,7 @@ export default class TicketsCommand extends Command {
   cmdName = "ticket category";
   description = "Set the category for a specific ticket type.";
   groupName = "tickets";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

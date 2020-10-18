@@ -10,15 +10,13 @@ export default class UnwarnCommand extends Command {
   description = "Remove a users last warning.";
   usage: "<@user>";
   groupName = "moderation";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,
     message: Message,
     args: string[],
     userData: DbUser,
-    guildData: DbGuild,
-    command: string
   ) {
     const targetUser = message.mentions.members.first();
     if (!targetUser)

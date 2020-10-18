@@ -9,7 +9,7 @@ export default class GiveawayRerollCommand extends Command {
   cmdName = "giveaways reroll";
   description = "Reroll one of the ended giveaways.";
   groupName = "giveaways";
-  permissions = ["GIVEAWAY"];
+  permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {
     const messageId = args[1];

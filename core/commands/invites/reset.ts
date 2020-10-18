@@ -9,7 +9,7 @@ export default class InvitesResetCommand extends Command {
   cmdName = "invites reset";
   description = "Reset the amount of invites a user has.";
   groupName = "invites";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(client: Main, message: Message) {
     const user = message.mentions.users.first();

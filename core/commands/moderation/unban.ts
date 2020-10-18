@@ -11,15 +11,12 @@ export default class UnbanCommand extends Command {
   description = "Unban a user from the discord server.";
   usage: "<user>";
   groupName = "moderation";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,
     message: Message,
     args: string[],
-    userData: DbUser,
-    guildData: DbGuild,
-    command: string
   ) {
     const targetUser = args[0];
     if (!targetUser)

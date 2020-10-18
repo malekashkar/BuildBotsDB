@@ -1,9 +1,9 @@
 import Main from "../../";
 import { Message } from "discord.js";
 import { DbUser } from "../models/user";
-import { DbGuild } from "../models/guild";
+import { DbGuild, GuildModel } from "../models/guild";
 export default abstract class Command {
-  aliases?: string[] = [];
+  permission: string;
   disabled = false;
   usage = "";
 
@@ -18,19 +18,4 @@ export default abstract class Command {
     _guildData?: DbGuild,
     _command?: string
   ): Promise<Message | void>;
-}
-
-export function checkPermission(message: Message, permission: string) {
-  if (
-    permission.toLowerCase().includes("admin") &&
-    !message.member.permissions.has("ADMINISTRATOR")
-  )
-    return false;
-  if (
-    permission.toLowerCase().includes("owner") &&
-    message.member.guild.owner !== message.member
-  )
-    return false;
-
-  return true;
 }

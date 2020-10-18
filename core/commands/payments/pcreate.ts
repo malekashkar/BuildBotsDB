@@ -9,7 +9,7 @@ export default class PaymentCreateCommand extends Command {
   cmdName = "payment create";
   description = "Create a new payment type.";
   groupName = "payments";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

@@ -9,7 +9,7 @@ export default class TicketsCommand extends Command {
   cmdName = "ticket repost";
   description = "Report the ticket panel to a specific ticket type.";
   groupName = "tickets";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

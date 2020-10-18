@@ -13,15 +13,12 @@ export default class TempBanCommand extends Command {
   description = "Temporarily ban a user from the discord server.";
   usage: "<@user> <time>";
   groupName = "moderation";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,
     message: Message,
     args: string[],
-    userData: DbUser,
-    guildData: DbGuild,
-    command: string
   ) {
     const targetUser = message.mentions.members.first();
     if (!targetUser)

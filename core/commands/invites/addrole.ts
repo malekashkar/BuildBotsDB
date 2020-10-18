@@ -9,7 +9,7 @@ export default class InvitesAddRoleCommand extends Command {
   cmdName = "invites addrole";
   description = "Add a role to the invite rewards.";
   groupName = "invites";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,

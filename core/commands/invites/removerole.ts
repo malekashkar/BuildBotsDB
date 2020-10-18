@@ -9,7 +9,7 @@ export default class InvitesRemoveRoleCommand extends Command {
   cmdName = "invites removerole";
   description = "Remove a role from the invite rewards.";
   groupName = "invites";
-  permissions = ["ADMIN"];
+  permission = "ADMIN";
 
   async run(
     client: Main,
