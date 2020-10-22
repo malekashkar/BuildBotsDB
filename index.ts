@@ -1,8 +1,11 @@
 import settings from "./settings.json";
 import Command from "./core/commands";
 import modules from "./core";
+import dotenv from "dotenv";
 
 import { Collection, Invite, Client } from "discord.js";
+
+dotenv.config();
 
 export default class Main extends Client {
   commands: Collection<string, Command> = new Collection();
@@ -20,4 +23,4 @@ export default class Main extends Client {
   }
 }
 
-new modules(new Main(), settings);
+new modules(new Main(), settings, process.env);

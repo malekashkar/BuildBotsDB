@@ -16,8 +16,6 @@ export interface ISettings {
   name: string;
   prefix: string;
   owner: string;
-  token: string;
-  mongoURL: string;
   modules: IModules;
 }
 
@@ -32,12 +30,12 @@ export interface IModules {
 }
 
 export default class Modules {
-  constructor(client: Main, settings: ISettings) {
-    client.login(settings.token);
+  constructor(client: Main, settings: ISettings, env: any) {
+    client.login(env.DISCORD_TOKEN);
+    this.loadDatabase(env.MONGO);
 
     this.loadCommands(client);
     this.loadEvents(client);
-    this.loadDatabase(settings.mongoURL + settings.name);
     this.initGarbageCollectors(client);
   }
 

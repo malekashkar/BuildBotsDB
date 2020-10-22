@@ -1,5 +1,4 @@
-import Main from "../../";
-import Command from "../commands";
+import Main from "../..";
 import embeds from "../utils/embeds";
 import logger from "../utils/logger";
 
@@ -77,7 +76,10 @@ export default class commandHandler extends Event {
         return;
       }
 
-      if (!(await checkPermission(message, commandObj.permission, guildData))) {
+      if (
+        commandObj.permission &&
+        !(await checkPermission(message, commandObj.permission, guildData))
+      ) {
         message.channel.send(
           embeds.error(
             `You don't have the **right permissions** to run the command \`${command}\`!`,

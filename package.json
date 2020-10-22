@@ -8,7 +8,7 @@
     "watch": "nodemon index.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "Deposit#0001",
   "license": "ISC",
   "dependencies": {
     "@types/common-tags": "^1.8.0",

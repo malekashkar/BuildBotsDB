@@ -13,6 +13,9 @@ export interface DbGuild extends Document {
   createOrder?: {
     messageId: string;
   };
+  private?: {
+    orderParent: string;
+  };
 }
 
 interface ticketTypes {
@@ -110,6 +113,9 @@ export const GuildSchema = new mongoose.Schema({
   },
   createOrder: {
     messageId: String,
+  },
+  private: {
+    orderParent: String,
   },
 });
 

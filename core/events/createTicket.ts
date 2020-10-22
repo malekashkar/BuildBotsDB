@@ -32,8 +32,6 @@ export default class createTicket extends Event {
     );
     if (!typeData) return;
 
-    console.log(user.id);
-
     const channel = await message.guild.channels.create(
       `${user.username}-ticket`,
       {

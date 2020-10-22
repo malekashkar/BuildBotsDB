@@ -79,7 +79,7 @@ export default class HelpCommand extends Command {
 
           let description = ``;
           for (let i = 0; i < groupInfo.commands.length; i++) {
-            description += `${guildData.prefix}${groupInfo.commands[i]} ~ ${groupInfo.descriptions[i]}\n`;
+            description += `**${guildData.prefix}${groupInfo.commands[i]}** ~ ${groupInfo.descriptions[i]}\n`;
           }
 
           helpMessage.reactions.removeAll();
@@ -99,7 +99,7 @@ export default class HelpCommand extends Command {
 
       let description = ``;
       for (let i = 0; i < groupInfo.commands.length; i++) {
-        description += `${guildData.prefix}${groupInfo.commands[i]} ~ ${groupInfo.descriptions[i]}\n`;
+        description += `**${guildData.prefix}${groupInfo.commands[i]}** ~ ${groupInfo.descriptions[i]}\n`;
       }
 
       message.channel.send(
