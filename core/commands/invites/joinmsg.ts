@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class InvitesJoinMessageCommand extends Command {
   cmdName = "invites joinmsg";
   description = "Set the server join message.";
-  groupName = "invites";
+  module = "invites";
   permission = "ADMIN";
 
   async run(

@@ -7,7 +7,7 @@ import embeds from "../../utils/embeds";
 export default class GiveawayStopCommand extends Command {
   cmdName = "giveaways stop";
   description = "Stop one of the currently active giveaways, and don't pick winners.";
-  groupName = "giveaways";
+  module = "giveaways";
   permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {

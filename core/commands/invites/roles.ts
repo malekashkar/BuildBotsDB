@@ -7,7 +7,7 @@ import { DbGuild } from "../../models/guild";
 export default class InvitesRolesCommand extends Command {
   cmdName = "invites roles";
   description = "Check the current invite roles available.";
-  groupName = "invites";
+  module = "invites";
 
   async run(
     client: Main,

@@ -7,7 +7,7 @@ export default class ClearAllCommmand extends Command {
   cmdName = "kick";
   description = "Kick a user from the discord server.";
   usage: "<@user>";
-  groupName = "moderation";
+  module = "moderation";
   permission = "ADMIN";
 
   async run(client: Main, message: Message) {

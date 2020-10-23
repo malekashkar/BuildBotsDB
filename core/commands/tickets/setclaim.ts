@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class TicketsCommand extends Command {
   cmdName = "ticket setclaim";
   description = "Set the claim channel for a specific ticket type.";
-  groupName = "tickets";
+  module = "tickets";
   permission = "ADMIN";
 
   async run(

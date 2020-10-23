@@ -8,7 +8,7 @@ import { InviteModel } from "../../models/invite";
 export default class InvitesResetCommand extends Command {
   cmdName = "invites reset";
   description = "Reset the amount of invites a user has.";
-  groupName = "invites";
+  module = "invites";
   permission = "ADMIN";
 
   async run(client: Main, message: Message) {

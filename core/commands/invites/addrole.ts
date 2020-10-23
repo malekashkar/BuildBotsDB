@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class InvitesAddRoleCommand extends Command {
   cmdName = "invites addrole";
   description = "Add a role to the invite rewards.";
-  groupName = "invites";
+  module = "invites";
   permission = "ADMIN";
 
   async run(

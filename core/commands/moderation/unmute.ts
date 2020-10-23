@@ -9,7 +9,7 @@ export default class UnmuteCommand extends Command {
   cmdName = "unmute";
   description = "Unmute a user which gives them back their access to speaking.";
   usage: "<@user>";
-  groupName = "moderation";
+  module = "moderation";
   permission = "ADMIN";
 
   async run(

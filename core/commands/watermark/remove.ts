@@ -4,8 +4,8 @@ import { Message } from "discord.js";
 import Main from "../../..";
 
 export default class ClCommand extends Command {
-  cmdName = "cl";
-  description = "Create a change-log update.";
+  cmdName = "watermark remove";
+  description = "Remove the watermark at the bottom of every embed message.";
   usage = "<update amt> <title>";
   module = "utility";
   permission = "ADMIN";

@@ -7,7 +7,7 @@ import { GiveawayModel } from "../../models/giveaway";
 export default class TestGiveawayCommand extends Command {
   cmdName = "giveaways test";
   description = "Send the giveaway test.";
-  groupName = "giveaways";
+  module = "giveaways";
   permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {

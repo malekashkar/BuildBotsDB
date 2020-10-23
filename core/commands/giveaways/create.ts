@@ -8,7 +8,7 @@ import question from "../../utils/question";
 export default class GiveawayCreateCommand extends Command {
   cmdName = "giveaways create";
   description = "Create a new giveaway";
-  groupName = "giveaways";
+  module = "giveaways";
   permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {

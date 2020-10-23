@@ -10,7 +10,7 @@ export default class UnbanCommand extends Command {
   cmdName = "unban";
   description = "Unban a user from the discord server.";
   usage: "<user>";
-  groupName = "moderation";
+  module = "moderation";
   permission = "ADMIN";
 
   async run(

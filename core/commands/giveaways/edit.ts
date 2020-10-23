@@ -9,7 +9,7 @@ import question from "../../utils/question";
 export default class EditGiveawayCommand extends Command {
   cmdName = "giveaways edit";
   description = "Edit a giveaway to new settings.";
-  groupName = "giveaways";
+  module = "giveaways";
   permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {

@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class InvitesRemoveRoleCommand extends Command {
   cmdName = "invites removerole";
   description = "Remove a role from the invite rewards.";
-  groupName = "invites";
+  module = "invites";
   permission = "ADMIN";
 
   async run(

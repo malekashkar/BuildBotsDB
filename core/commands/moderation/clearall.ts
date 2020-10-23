@@ -7,7 +7,7 @@ import confirmation from "../../utils/confirmation";
 export default class ClearAllCommmand extends Command {
   cmdName = "clearall";
   description = "Clear all the mesasges in a specific channel.";
-  groupName = "moderation";
+  module = "moderation";
   permission = "ADMIN";
 
   async run(client: Main, message: Message) {

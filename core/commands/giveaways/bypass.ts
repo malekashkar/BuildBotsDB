@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class GiveawayBypassCommand extends Command {
   cmdName = "giveaways bypass";
   description = "Give a role access to admin giveaway commands.";
-  groupName = "giveaways";
+  module = "giveaways";
   permission = "ADMIN";
   
   async run(

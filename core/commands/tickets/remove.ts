@@ -7,7 +7,7 @@ import { TicketModel } from "../../models/ticket";
 export default class TicketsCommand extends Command {
   cmdName = "ticket remove";
   description = "Remove someone from your ticket channel.";
-  groupName = "tickets";
+  module = "tickets";
 
   async run(client: Main, message: Message) {
     const ticketData = await TicketModel.findOne({

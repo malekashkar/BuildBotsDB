@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class InvitesLeaveChannelCommand extends Command {
   cmdName = "invites leavechannel";
   description = "Set the server leave message channel.";
-  groupName = "invites";
+  module = "invites";
   permission = "ADMIN";
 
   async run(

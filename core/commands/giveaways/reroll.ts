@@ -3,12 +3,12 @@ import Command from "..";
 import Main from "../../..";
 import { GiveawayModel } from "../../models/giveaway";
 import embeds from "../../utils/embeds";
-import _ from "underscore";
+import _ from "lodash";
 
 export default class GiveawayRerollCommand extends Command {
   cmdName = "giveaways reroll";
   description = "Reroll one of the ended giveaways.";
-  groupName = "giveaways";
+  module = "giveaways";
   permission = "GIVEAWAY";
 
   async run(client: Main, message: Message, args: string[]) {
@@ -46,7 +46,7 @@ export default class GiveawayRerollCommand extends Command {
         )
       );
 
-    const winners = _.sample(reactedUsers, giveawayData.winners);
+    const winners = _.sampleSize(reactedUsers, giveawayData.winners);
 
     giveawayMessage.edit(
       `:tada: **GIVEAWAY ENDED** :tada:`,

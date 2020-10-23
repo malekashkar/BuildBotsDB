@@ -1,7 +1,7 @@
-import { spawn } from "child_process";
 import fetch from "node-fetch";
 import path from "path";
 import fs from "fs";
+import pm2 from "pm2";
 
 export default async function createBot(
   token: string,
@@ -14,14 +14,34 @@ export default async function createBot(
       Authorization: `Bot ${token}`,
     },
   });
-  if (!response.ok) return `The token you provided is invalid.`;
+  if (!response.ok)
+    return {
+      success: false,
+      message: `The token you provided is invalid.`,
+    };
 
   const botJson = await response.json();
-  if (!botJson.bot || !botJson.bot.username) return `That's not a discord bot!`;
+  console.log(botJson);
+  if (!botJson.bot)
+    return {
+      success: false,
+      message: `That's not a discord bot.`,
+    };
 
-  const templateFile = path.join(__dirname, "..", "..", "index.ts");
+  const templateFile = path.join(
+    __dirname,
+    "..",
+    "..",
+    "bots",
+    "Template",
+    "index.ts"
+  );
   const templateFolder = fs.existsSync(templateFile);
-  if (!templateFolder) return `There is no template bot available.`;
+  if (!templateFolder)
+    return {
+      success: false,
+      message: `The template bot file cannot be located, please let an administrator know of this issue.`,
+    };
 
   const botsDirectory = path.join(__dirname, "..", "..", "bots");
   const botsFolder = fs.existsSync(botsDirectory);
@@ -29,7 +49,12 @@ export default async function createBot(
 
   const botDirectory = path.join(botsDirectory, botJson.username);
   const botFolder = fs.existsSync(path.join(botsDirectory, botJson.username));
-  if (botFolder) return `The bot name ${botJson.username} is already taken!`;
+  if (botFolder)
+    return {
+      success: false,
+      message: `The bot name ${botJson.username} is already taken!`,
+    };
+  else fs.mkdirSync(botDirectory);
 
   // Create the index.ts file.
   fs.copyFileSync(templateFile, path.join(botDirectory, "index.ts"));
@@ -38,7 +63,7 @@ export default async function createBot(
   fs.writeFileSync(
     path.join(botDirectory, "settings.json"),
     JSON.stringify({
-      name: botJson.username,
+      name: botJson.username.toLowerCase().replace(" ", "_"),
       prefix,
       owner,
       modules,
@@ -46,22 +71,17 @@ export default async function createBot(
   );
 
   // Set the .env file up.
-  fs.writeFileSync(
-    path.join(botDirectory, ".env"),
-    `DISCORD_TOKEN=${token}
-    MONGO=mongodb://localhost/${name}`
-  );
+  const envContent = `DISCORD_TOKEN=${token}`;
+  fs.writeFileSync(path.join(botDirectory, ".env"), envContent, "utf8");
 
   // Set the package.json file up.
   fs.writeFileSync(
     path.join(botDirectory, "package.json"),
     JSON.stringify({
-      name: botJson.username,
+      name: botJson.username.toLowerCase().replace(" ", "_"),
       version: "1.0.0",
       main: "index.ts",
-      scripts: {
-        start: "ts-node index.ts",
-      },
+      scripts: {},
       keywords: [],
       author: "Deposit#0001",
       license: "ISC",
@@ -69,11 +89,25 @@ export default async function createBot(
     })
   );
 
-  const node = spawn(`yarn start`, ["index.ts"], {
-    cwd: botDirectory,
+  pm2.connect((err: Error) => {
+    pm2.start(
+      {
+        name: botJson.username.toLowerCase().replace(" ", "_"),
+        script: "index.ts",
+        cwd: botDirectory,
+      },
+      (err: Error) => {
+        pm2.disconnect();
+        if (err) throw err;
+      }
+    );
   });
 
-  node.stdout.on(`data`, (data) => console.log(data.toString()));
-  node.stderr.on(`data`, (data) => console.log(data.toString()));
-  return `The bot ${botJson.username} has been created and started!`;
+  return {
+    success: true,
+    id: botJson.id,
+    username: botJson.username,
+    tag: botJson.username + botJson.discriminator,
+    message: `The bot ${botJson.username} has been created and started!`,
+  };
 }

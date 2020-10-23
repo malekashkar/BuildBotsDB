@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class GiveawayAdminCommand extends Command {
   cmdName = "giveaways admin";
   description = "Give a user access to admin giveaway commands.";
-  groupName = "giveaways";
+  module = "giveaways";
   permission = "ADMIN";
   
   async run(

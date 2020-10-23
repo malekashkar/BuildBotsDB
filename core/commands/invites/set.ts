@@ -8,7 +8,7 @@ import { InviteModel } from "../../models/invite";
 export default class InvitesSetCommand extends Command {
   cmdName = "invites set";
   description = "Set the amount of invites a user has.";
-  groupName = "invites";
+  module = "invites";
   permission = "ADMIN";
 
   async run(client: Main, message: Message, args: string[]) {

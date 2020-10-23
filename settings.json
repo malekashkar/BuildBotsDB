@@ -2,13 +2,5 @@
   "name": "BuildBotsDB",
   "prefix": "!",
   "owner": "584915458302672916",
-  "modules": {
-    "giveaways": true,
-    "invites": true,
-    "leveling": true,
-    "moderation": true,
-    "payments": true,
-    "tickets": true,
-    "utils": true
-  }
+  "modules": ["giveaways", "invites", "leveling", "moderation", "payments", "tickets", "utils"]
 }

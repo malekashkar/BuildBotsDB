@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class InvitesLeaveMessageCommand extends Command {
   cmdName = "invites leavemsg";
   description = "Set the server leave message.";
-  groupName = "invites";
+  module = "invites";
   permission = "ADMIN";
 
   async run(

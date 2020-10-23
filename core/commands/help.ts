@@ -14,7 +14,7 @@ interface IGroup {
 export default class HelpCommand extends Command {
   cmdName = "help";
   description = "Get a list of all the commands.";
-  groupName = "utility";
+  module = "utility";
 
   async run(
     client: Main,
@@ -26,10 +26,10 @@ export default class HelpCommand extends Command {
     const help: Collection<string, IGroup> = new Collection();
 
     for (const command of client.commands.array()) {
-      if (command.groupName.toLowerCase() === "createbot") continue;
-      const group = help.get(toTitleCase(command.groupName));
+      if (command.module.toLowerCase() === "createbot") continue;
+      const group = help.get(toTitleCase(command.module));
       if (!group) {
-        help.set(toTitleCase(command.groupName), {
+        help.set(toTitleCase(command.module), {
           commands: [command.cmdName],
           descriptions: [command.description],
         });
@@ -39,8 +39,8 @@ export default class HelpCommand extends Command {
       }
     }
 
-    const groups: string[] = Array.from(help).map(([name, value]) => name);
-    const fields = groups.map((name: string) => {
+    const modules: string[] = Array.from(help).map(([name, value]) => name);
+    const fields = modules.map((name: string) => {
       return {
         name: `**${name}** commands`,
         value: `*react with ${groupEmojis[name.toLowerCase()]} to view*`,
@@ -58,8 +58,8 @@ export default class HelpCommand extends Command {
           .setTimestamp()
       );
 
-      for (const groupName of groups) {
-        helpMessage.react(groupEmojis[groupName.toLowerCase()]);
+      for (const module of modules) {
+        helpMessage.react(groupEmojis[module.toLowerCase()]);
       }
 
       helpMessage
@@ -93,7 +93,7 @@ export default class HelpCommand extends Command {
           );
         })
         .catch(async () => await helpMessage.reactions.removeAll());
-    } else if (groups.includes(toTitleCase(args[0]))) {
+    } else if (modules.includes(toTitleCase(args[0]))) {
       const categoryName = toTitleCase(args[0]);
       const groupInfo = help.get(categoryName);
 

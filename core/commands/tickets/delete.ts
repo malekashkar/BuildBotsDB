@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class TicketsCommand extends Command {
   cmdName = "ticket delete";
   description = "Delete one of the ticket types.";
-  groupName = "tickets";
+  module = "tickets";
   permission = "ADMIN";
 
   async run(

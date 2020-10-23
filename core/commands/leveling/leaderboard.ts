@@ -8,7 +8,7 @@ import { UserModel } from "../../models/user";
 export default class Commmand extends Command {
   cmdName = "leaderboard";
   description = "Check the leaderboard for users with most xp.";
-  groupName = "levels";
+  module = "levels";
 
   async run(client: Main, message: Message) {
     try {

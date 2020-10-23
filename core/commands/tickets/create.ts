@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class TicketsCommand extends Command {
   cmdName = "ticket create";
   description = "Create a new ticket type.";
-  groupName = "tickets";
+  module = "tickets";
   permission = "ADMIN";
 
   async run(

@@ -6,7 +6,7 @@ import Main from "../../..";
 export default class FeedbackCommmand extends Command {
   cmdName = "feedback";
   description = "Create a message on your server to receive feedback.";
-  groupName = "utility";
+  module = "utility";
   permission = "ADMIN";
 
   async run(client: Main, message: Message) {

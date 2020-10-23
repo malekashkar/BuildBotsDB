@@ -9,7 +9,7 @@ import { DbGuild } from "../../models/guild";
 export default class CreateOrderMessage extends Command {
   cmdName = "ordermessage";
   description = "Create the order message";
-  groupName = "createBot";
+  module = "createBot";
   permission = "ADMIN";
 
   async run(
@@ -34,16 +34,16 @@ export default class CreateOrderMessage extends Command {
         stripIndents`React with the ✅ to create an order.\n\nModules Available\n\n:one: Moderation\n:two: Giveaways\n:three: Polls, Changelogs and Feedback\n:four: Levels & Leaderboard\n:five: Invite Tracker\n:six: Payments & Gateways\n:seven: Tickets & Support\n:eight: Commissioner\n:nine: Music\n:keycap_ten: Copyright Removal`
       )
     );
-
-    if (!msg)
-      return message.channel.send(
-        embeds.error(
-          `I am not able to send the order message into the channel ${channel}.`
-        )
-      );
-    else msg.react("✅");
+    msg.react("✅");
 
     guildData.createOrder.messageId = msg.id;
+    if (!guildData.createOrder.categoryId) {
+      guildData.createOrder.categoryId = (
+        await message.guild.channels.create(`Order Tickets`, {
+          type: "category",
+        })
+      ).id;
+    }
     await guildData.save();
   }
 }

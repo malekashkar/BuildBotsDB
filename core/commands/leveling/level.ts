@@ -9,7 +9,7 @@ export default class Commmand extends Command {
   cmdName = "level";
   description = "Check your own or another users level information.";
   usage = "[@user]";
-  groupName = "levels";
+  module = "levels";
 
   async run(client: Main, message: Message, args: string[], userData: DbUser) {
     const user = message.mentions.users.first() || message.author;

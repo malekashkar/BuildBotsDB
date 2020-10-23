@@ -9,7 +9,7 @@ export default class UnwarnCommand extends Command {
   cmdName = "unwarn";
   description = "Remove a users last warning.";
   usage: "<@user>";
-  groupName = "moderation";
+  module = "moderation";
   permission = "ADMIN";
 
   async run(

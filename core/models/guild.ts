@@ -12,9 +12,7 @@ export interface DbGuild extends Document {
   giveaways?: giveaways;
   createOrder?: {
     messageId: string;
-  };
-  private?: {
-    orderParent: string;
+    categoryId: string;
   };
 }
 
@@ -112,10 +110,8 @@ export const GuildSchema = new mongoose.Schema({
     adminUsers: [String],
   },
   createOrder: {
+    categoryId: String,
     messageId: String,
-  },
-  private: {
-    orderParent: String,
   },
 });
 

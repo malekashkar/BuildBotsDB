@@ -10,7 +10,7 @@ export default class WarnCommand extends Command {
   cmdName = "warn";
   description = "Give a user a warning.";
   usage: "<@user> [reason]";
-  groupName = "moderation";
+  module = "moderation";
   permission = "ADMIN";
 
   async run(

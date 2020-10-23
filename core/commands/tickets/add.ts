@@ -7,7 +7,7 @@ import { TicketModel } from "../../models/ticket";
 export default class TicketsCommand extends Command {
   cmdName = "ticket add";
   description = "Add someone to your ticket channel.";
-  groupName = "tickets";
+  module = "tickets";
 
   async run(client: Main, message: Message) {
     const ticketData = await TicketModel.findOne({

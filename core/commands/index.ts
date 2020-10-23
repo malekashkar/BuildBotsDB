@@ -1,7 +1,7 @@
 import Main from "../../";
 import { Message } from "discord.js";
 import { DbUser } from "../models/user";
-import { DbGuild, GuildModel } from "../models/guild";
+import { DbGuild } from "../models/guild";
 export default abstract class Command {
   permission: string;
   disabled = false;
@@ -9,7 +9,7 @@ export default abstract class Command {
 
   abstract cmdName: string;
   abstract description: string;
-  abstract groupName: string;
+  abstract module: string;
   abstract async run(
     _client: Main,
     _message: Message,

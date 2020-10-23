@@ -6,7 +6,7 @@ export default class botStarted extends Event {
 
   async handle(client: Main) {
     logger.info(
-      `BOT_STARTED`,
+      `BOT`,
       `The bot "${client.user.username}" has started successfully.`
     );
   }

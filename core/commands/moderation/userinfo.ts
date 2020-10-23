@@ -10,7 +10,7 @@ export default class UserinfoCommand extends Command {
   cmdName = "userinfo";
   description = "Display the information of a user.";
   usage: "<@user>";
-  groupName = "moderation";
+  module = "moderation";
 
   async run(
     client: Main,

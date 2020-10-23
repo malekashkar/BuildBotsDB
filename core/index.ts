@@ -1,7 +1,7 @@
 import ms from "ms";
 import path from "path";
 import fs from "fs-extra";
-import _ from "underscore";
+import _ from "lodash";
 import mongoose from "mongoose";
 
 import Main from "..";
@@ -16,23 +16,18 @@ export interface ISettings {
   name: string;
   prefix: string;
   owner: string;
-  modules: IModules;
-}
-
-export interface IModules {
-  giveaways: boolean;
-  invites: boolean;
-  leveling: boolean;
-  moderation: boolean;
-  payments: boolean;
-  tickets: boolean;
-  utils: boolean;
+  modules: string[];
 }
 
 export default class Modules {
   constructor(client: Main, settings: ISettings, env: any) {
     client.login(env.DISCORD_TOKEN);
-    this.loadDatabase(env.MONGO);
+    logger.info("BOT", `Logging into the bot "${settings.name}".`);
+
+    this.loadDatabase(
+      `mongodb://localhost/${settings.name}` // ${env.DB_USER}:${env.DB_PASSWORD}@${env.DB_HOST}${env.DB_PORT}/${env.DB_AUTHDB}
+    );
+    logger.info("DATABASE", `The database is connecting.`);
 
     this.loadCommands(client);
     this.loadEvents(client);
@@ -52,6 +47,11 @@ export default class Modules {
       },
       (err) => {
         if (err) logger.error("DATABASE", err);
+        else
+          logger.info(
+            "DATABASE",
+            `The database has been connected successfully.`
+          );
       }
     );
   }
@@ -212,7 +212,7 @@ export default class Modules {
                 .setTimestamp(Date.now())
             );
           } else {
-            const winners = _.sample(reactedUsers, giveaway.winners);
+            const winners = _.sampleSize(reactedUsers, giveaway.winners);
 
             giveawayMessage.edit(
               `:tada: **GIVEAWAY ENDED** :tada:`,

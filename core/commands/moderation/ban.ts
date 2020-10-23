@@ -10,7 +10,7 @@ export default class BanCommand extends Command {
   cmdName = "ban";
   description = "Ban a user from your discord server.";
   usage = "<@user>";
-  groupName = "moderation";
+  module = "moderation";
   permission = "ADMIN";
 
   async run(client: Main, message: Message, args: string[]) {

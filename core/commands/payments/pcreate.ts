@@ -8,7 +8,7 @@ import embeds from "../../utils/embeds";
 export default class PaymentCreateCommand extends Command {
   cmdName = "payment create";
   description = "Create a new payment type.";
-  groupName = "payments";
+  module = "payments";
   permission = "ADMIN";
 
   async run(
