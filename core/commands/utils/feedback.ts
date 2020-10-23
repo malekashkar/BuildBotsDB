@@ -1,7 +1,7 @@
 import embeds from "../../utils/embeds";
 import Command from "..";
 import { Message } from "discord.js";
-import Main from "../../..";
+import Main from "../../structures/client";
 
 export default class FeedbackCommmand extends Command {
   cmdName = "feedback";

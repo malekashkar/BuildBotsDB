@@ -1,6 +1,6 @@
 import { Message, MessageEmbed, TextChannel, User } from "discord.js";
 import Command from "..";
-import Main from "../../..";
+import Main from "../../structures/client";
 import { GiveawayModel } from "../../models/giveaway";
 import embeds from "../../utils/embeds";
 import _ from "lodash";

@@ -1,6 +1,0 @@
-{
-  "name": "BuildBotsDB",
-  "prefix": "!",
-  "owner": "584915458302672916",
-  "modules": ["giveaways", "invites", "leveling", "moderation", "payments", "tickets", "utils"]
-}

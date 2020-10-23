@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import Command from "..";
-import Main from "../../..";
+import Main from "../../structures/client";
 import embeds from "../../utils/embeds";
 import { stripIndents } from "common-tags";
 import { DbUser } from "../../models/user";

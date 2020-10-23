@@ -1,5 +1,5 @@
 import Event from ".";
-import Main from "../../";
+import Main from "../structures/client";
 
 export default class createGuildInvites extends Event {
   name = "ready";

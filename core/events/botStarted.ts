@@ -1,4 +1,4 @@
-import Main from "../../";
+import Main from "../structures/client";
 import logger from "../utils/logger";
 import Event from ".";
 export default class botStarted extends Event {

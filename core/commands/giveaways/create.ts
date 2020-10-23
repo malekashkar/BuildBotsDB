@@ -1,7 +1,7 @@
 import { Message, MessageEmbed, Role, TextChannel } from "discord.js";
 import ms from "ms";
 import Command from "..";
-import Main from "../../..";
+import Main from "../../structures/client";
 import { GiveawayModel } from "../../models/giveaway";
 import question from "../../utils/question";
 

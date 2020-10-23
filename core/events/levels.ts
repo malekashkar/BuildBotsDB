@@ -1,4 +1,4 @@
-import Main from "../../";
+import Main from "../structures/client";
 
 import { Message } from "discord.js";
 import { UserModel } from "../models/user";

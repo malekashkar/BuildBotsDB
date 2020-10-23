@@ -1,4 +1,4 @@
-import Main from "../../";
+import Main from "../structures/client";
 import moment from "moment";
 import embeds from "../utils/embeds";
 

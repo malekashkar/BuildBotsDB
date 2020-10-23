@@ -1,6 +1,6 @@
 import { MessageReaction, User } from "discord.js";
 import Event from ".";
-import Main from "../..";
+import Main from "../structures/client";
 import { GuildModel } from "../models/guild";
 
 export default class createOrder extends Event {

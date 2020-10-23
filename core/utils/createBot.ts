@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import path from "path";
 import fs from "fs";
-import pm2 from "pm2";
+import child_process from "child_process";
 
 export default async function createBot(
   token: string,
@@ -21,7 +21,6 @@ export default async function createBot(
     };
 
   const botJson = await response.json();
-  console.log(botJson);
   if (!botJson.bot)
     return {
       success: false,
@@ -47,36 +46,33 @@ export default async function createBot(
   const botsFolder = fs.existsSync(botsDirectory);
   if (!botsFolder) fs.mkdirSync(botsDirectory);
 
-  const botDirectory = path.join(botsDirectory, botJson.username);
-  const botFolder = fs.existsSync(path.join(botsDirectory, botJson.username));
-  if (botFolder)
+  const botFolder = path.join(botsDirectory, botJson.username);
+  const botFolderExists = fs.existsSync(botFolder);
+  if (botFolderExists)
     return {
       success: false,
       message: `The bot name ${botJson.username} is already taken!`,
     };
-  else fs.mkdirSync(botDirectory);
+  else fs.mkdirSync(botFolder);
 
   // Create the index.ts file.
-  fs.copyFileSync(templateFile, path.join(botDirectory, "index.ts"));
+  fs.copyFileSync(templateFile, path.join(botFolder, "index.ts"));
 
   // Set the settings.json file up.
   fs.writeFileSync(
-    path.join(botDirectory, "settings.json"),
+    path.join(botFolder, "settings.json"),
     JSON.stringify({
       name: botJson.username.toLowerCase().replace(" ", "_"),
       prefix,
       owner,
       modules,
+      token
     })
   );
 
-  // Set the .env file up.
-  const envContent = `DISCORD_TOKEN=${token}`;
-  fs.writeFileSync(path.join(botDirectory, ".env"), envContent, "utf8");
-
   // Set the package.json file up.
   fs.writeFileSync(
-    path.join(botDirectory, "package.json"),
+    path.join(botFolder, "package.json"),
     JSON.stringify({
       name: botJson.username.toLowerCase().replace(" ", "_"),
       version: "1.0.0",
@@ -89,19 +85,15 @@ export default async function createBot(
     })
   );
 
-  pm2.connect((err: Error) => {
-    pm2.start(
-      {
-        name: botJson.username.toLowerCase().replace(" ", "_"),
-        script: "index.ts",
-        cwd: botDirectory,
-      },
-      (err: Error) => {
-        pm2.disconnect();
-        if (err) throw err;
-      }
-    );
-  });
+  child_process.exec(
+    `pm2 start index.ts --name ${botJson.username}`, // ts-node index.ts
+    {
+      cwd: botFolder,
+    },
+    (error: Error, stdout: string | Buffer, stderr: string | Buffer) => {
+      console.log(error, stdout, stderr);
+    }
+  );
 
   return {
     success: true,

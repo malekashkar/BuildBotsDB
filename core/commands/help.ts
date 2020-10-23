@@ -1,5 +1,5 @@
 import Command from ".";
-import Main from "../..";
+import Main from "../structures/client";
 import { Message, MessageEmbed, Collection } from "discord.js";
 import { DbUser } from "../models/user";
 import { DbGuild } from "../models/guild";

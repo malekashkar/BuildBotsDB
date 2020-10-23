@@ -1,6 +1,6 @@
 import { Message } from "discord.js";
 import Command from "..";
-import Main from "../../..";
+import Main from "../../structures/client";
 import embeds from "../../utils/embeds";
 import pretty from "pretty-ms";
 import ms from "ms";

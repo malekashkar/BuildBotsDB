@@ -1,7 +1,7 @@
 import { Message, TextChannel } from "discord.js";
 import confirmation from "../../utils/confirmation";
 import Command from "..";
-import Main from "../../../";
+import Main from "../../structures/client";
 import embeds from "../../utils/embeds";
 import { TicketModel } from "../../models/ticket";
 

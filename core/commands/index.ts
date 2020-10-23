@@ -1,4 +1,4 @@
-import Main from "../../";
+import Main from "../structures/client";
 import { Message } from "discord.js";
 import { DbUser } from "../models/user";
 import { DbGuild } from "../models/guild";

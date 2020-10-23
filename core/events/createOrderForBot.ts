@@ -1,4 +1,4 @@
-import Main from "../../";
+import Main from "../structures/client";
 import embeds from "../utils/embeds";
 import { emojis } from "../utils/storage";
 import createBot from "../utils/createBot";
@@ -76,9 +76,8 @@ export default class createTicket extends Event {
         )
       );
     } else {
-      msg.delete();
-      const paid = await channel.send(
-        // Make sure it checks for the payment
+      msg.reactions.removeAll();
+      msg.edit(
         embeds.normal(
           `Order Processing`,
           `[Click here](https://paypal.com) to pay for the following modules.\n${selectedEmojis
@@ -87,55 +86,47 @@ export default class createTicket extends Event {
         )
       );
 
-      if (paid) {
-        const selectedModules = selectedEmojis.map(
-          (x) => modules[emojis.indexOf(x)]
-        );
+      // Order must be paid before going this far.
 
-        channel.send(embeds.question(`What is the token of your discord bot?`));
-        const token = await channel.awaitMessages(
-          (x) => x.author.id === user.id,
-          {
-            max: 1,
-            time: 900000,
-            errors: ["time"],
-          }
-        );
+      const selectedModules = selectedEmojis.map(
+        (x) => modules[emojis.indexOf(x)]
+      );
 
-        channel.send(embeds.question(`Please enter a prefix for your bot.`));
-        const prefix = await channel.awaitMessages(
-          (x) => x.author.id === user.id,
-          {
-            max: 1,
-            time: 900000,
-            errors: ["time"],
-          }
-        );
-
-        const create = await createBot(
-          token.first().content,
-          prefix.first().content,
-          user.id,
-          selectedModules
-        );
-
-        if (!create.success) {
-          channel.send(embeds.error(create.message));
-        } else {
-          channel.send(
-            embeds.normal(
-              `Bot Created Successfully`,
-              `The bot ${create.username} has been created.`
-            )
-          );
-
-          user.send(
-            embeds.normal(
-              `Bot Created Successfully`,
-              `Your bot has been created! [Click here](https://discord.com/api/oauth2/authorize?client_id=${create.id}&permissions=8&scope=bot) for the invite link!`
-            )
-          );
+      channel.send(embeds.question(`What is the token of your discord bot?`));
+      const token = await channel.awaitMessages(
+        (x) => x.author.id === user.id,
+        {
+          max: 1,
+          time: 900000,
+          errors: ["time"],
         }
+      );
+
+      // Send the request to the api
+      const create = {
+        message: "yes",
+        username: "temp",
+        tag: "yes",
+      };
+
+      if (!create) {
+        channel.send(embeds.error(create.message));
+      } else {
+        setTimeout(() => channel.delete(), 10 * 1000);
+
+        channel.send(
+          embeds.normal(
+            `Bot Created Successfully`,
+            `The bot **${create.username}** has been created.\nThis channel will be deleted in the next 10 seconds!`
+          )
+        );
+
+        user.send(
+          embeds.normal(
+            `Bot Created Successfully`,
+            `Your bot **${create.tag}** has been created! [Click here](https://discord.com/api/oauth2/authorize?client_id=${create.id}&permissions=8&scope=bot) for the invite link!`
+          )
+        );
       }
     }
   }

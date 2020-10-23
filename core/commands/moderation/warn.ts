@@ -1,6 +1,6 @@
 import embeds from "../../utils/embeds";
 import Command from "..";
-import Main from "../../..";
+import Main from "../../structures/client";
 import { Message } from "discord.js";
 import { DbUser, UserModel } from "../../models/user";
 import { DbGuild } from "../../models/guild";

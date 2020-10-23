@@ -1,4 +1,4 @@
-import Main from "../..";
+import Main from "../structures/client";
 import embeds from "../utils/embeds";
 import logger from "../utils/logger";
 

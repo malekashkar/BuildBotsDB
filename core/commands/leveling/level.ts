@@ -2,7 +2,7 @@ import Command from "..";
 import { Message, MessageEmbed } from "discord.js";
 import { getLevel, xpUntilNextLevel } from "../../utils/levels";
 import { DbUser } from "../../models/user";
-import Main from "../../..";
+import Main from "../../structures/client";
 import { UserModel } from "../../models/user";
 
 export default class Commmand extends Command {

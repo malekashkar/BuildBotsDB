@@ -1,4 +1,4 @@
-import Main from "../../";
+import Main from "../structures/client";
 import placeholders from "../utils/placeholders";
 import { GuildMember, TextChannel } from "discord.js";
 import { InviteModel } from "../models/invite";

@@ -1,6 +1,6 @@
 import { Message, GuildChannel } from "discord.js";
 import Command from "..";
-import Main from "../../../";
+import Main from "../../structures/client";
 import embeds from "../../utils/embeds";
 import { TicketModel } from "../../models/ticket";
 

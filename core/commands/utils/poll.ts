@@ -2,7 +2,7 @@ import embeds from "../../utils/embeds";
 import Command from "..";
 import { Message, MessageEmbed } from "discord.js";
 import { emojis } from "../../utils/storage";
-import Main from "../../..";
+import Main from "../../structures/client";
 
 export default class PollCommmand extends Command {
   cmdName = "poll";

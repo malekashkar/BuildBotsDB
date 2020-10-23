@@ -4,28 +4,22 @@ import fs from "fs-extra";
 import _ from "lodash";
 import mongoose from "mongoose";
 
-import Main from "..";
+import Client from "./structures/client";
 import Event from "./events";
 import logger from "./utils/logger";
 import Command from "./commands";
 
+import { ISettings } from "../api/index";
 import { GiveawayModel } from "./models/giveaway";
 import { MessageEmbed, TextChannel, User } from "discord.js";
 
-export interface ISettings {
-  name: string;
-  prefix: string;
-  owner: string;
-  modules: string[];
-}
-
 export default class Modules {
-  constructor(client: Main, settings: ISettings, env: any) {
-    client.login(env.DISCORD_TOKEN);
-    logger.info("BOT", `Logging into the bot "${settings.name}".`);
+  constructor(client: Client, settings: ISettings) {
+    client.login(settings.token);
+    logger.info("BOT", `Logging into bot with ID "${settings.clientId}".`);
 
     this.loadDatabase(
-      `mongodb://localhost/${settings.name}` // ${env.DB_USER}:${env.DB_PASSWORD}@${env.DB_HOST}${env.DB_PORT}/${env.DB_AUTHDB}
+      `mongodb://localhost/${settings.clientId}` // ${env.DB_USER}:${env.DB_PASSWORD}@${env.DB_HOST}${env.DB_PORT}/${env.DB_AUTHDB}
     );
     logger.info("DATABASE", `The database is connecting.`);
 
@@ -57,7 +51,7 @@ export default class Modules {
   }
 
   loadCommands(
-    client: Main,
+    client: Client,
     directory: string = path.join(__dirname, "commands")
   ) {
     const directoryStats = fs.statSync(directory);
@@ -101,7 +95,7 @@ export default class Modules {
     }
   }
 
-  loadEvents(client: Main, directory = path.join(__dirname, "events")) {
+  loadEvents(client: Client, directory = path.join(__dirname, "events")) {
     const directoryStats = fs.statSync(directory);
     if (!directoryStats.isDirectory()) return;
 
@@ -132,7 +126,7 @@ export default class Modules {
     }
   }
 
-  initGarbageCollectors(client: Main) {
+  initGarbageCollectors(client: Client) {
     setInterval(async () => {
       const giveaways = await GiveawayModel.find();
 

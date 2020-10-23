@@ -1,6 +1,6 @@
 import { Message, TextChannel } from "discord.js";
 import Command from "..";
-import Main from "../../../";
+import Main from "../../structures/client";
 import { DbGuild } from "../../models/guild";
 import { DbUser } from "../../models/user";
 import embeds from "../../utils/embeds";

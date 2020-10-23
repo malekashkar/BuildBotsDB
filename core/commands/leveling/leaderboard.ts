@@ -2,7 +2,7 @@ import Command from "..";
 import { Message } from "discord.js";
 import embeds from "../../utils/embeds";
 import { getBorderCharacters, table } from "table";
-import Main from "../../..";
+import Main from "../../structures/client";
 import { UserModel } from "../../models/user";
 
 export default class Commmand extends Command {

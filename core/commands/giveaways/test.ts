@@ -1,7 +1,7 @@
 import { Message, MessageEmbed } from "discord.js";
 import ms from "ms";
 import Command from "..";
-import Main from "../../..";
+import Main from "../../structures/client";
 import { GiveawayModel } from "../../models/giveaway";
 
 export default class TestGiveawayCommand extends Command {
