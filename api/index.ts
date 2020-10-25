@@ -108,24 +108,8 @@ app.get("/start", async (req, res) => {
     return;
   }
 
-  const process = child_process.spawn(`ts-node`, ["index.ts"], {
+  child_process.execSync(`pm2 start index.ts --watch --name ${clientId}`, {
     cwd: botDirectory,
-  });
-
-  process.stdout.on("data", (data) => {
-    console.log(`stdout: ${data}`);
-  });
-
-  process.stderr.on("data", (data) => {
-    console.log(`stdout: ${data}`);
-  });
-
-  process.on("close", (code) => {
-    console.log(`child process closed with code ${code}`);
-  });
-
-  process.on("exit", (code) => {
-    console.log(`child process exited with code ${code}`);
   });
 
   if (process) {
