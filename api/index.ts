@@ -8,6 +8,9 @@ import child_process from "child_process";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const botsDirectory = path.join(__dirname, "..", "slaves");
+if (!fs.existsSync(botsDirectory)) fs.mkdirSync(botsDirectory);
+
 app.listen(PORT, () => {
   console.log(`Server is running on PORT: ${PORT}`);
 });
@@ -69,9 +72,6 @@ app.post("/create", async (req, res) => {
     clientId: botJson.id,
   };
 
-  const botsDirectory = path.join(__dirname, "..", "bots");
-  if (!fs.existsSync(botsDirectory)) fs.mkdirSync(botsDirectory);
-
   const botDirectory = path.join(botsDirectory, settings.clientId);
   if (fs.existsSync(botDirectory)) {
     res.send(400);
@@ -93,59 +93,43 @@ app.post("/create", async (req, res) => {
   });
 });
 
-app.get("/start", (req, res) => {
-  const clientId = req.params.id;
+app.get("/start", async (req, res) => {
+  const clientId = req.query.id.toString();
+  if (!clientId) {
+    res.status(400);
+    res.send(`Please provide the bot ID you would like to start.`);
+    return;
+  }
 
-  const botsDirectory = path.join(__dirname, "..", "bots");
   const botDirectory = path.join(botsDirectory, clientId);
   if (!fs.existsSync(botDirectory)) {
-    res.send(400);
+    res.status(400);
     res.send(`No bot was located with the id ${clientId}.`);
     return;
   }
 
-  child_process.exec(`pm2 start index.ts --name ${clientId}`, {
+  const process = child_process.spawn(`ts-node`, ["index.ts"], {
     cwd: botDirectory,
   });
 
-  res.status(500);
-  res.send(`Client with id ${clientId} is now turned on.`);
-});
+  process.stdout.on("data", (data) => {
+    console.log(`stdout: ${data}`);
+  });
 
-app.get("/stop", (req, res) => {
-  const clientId = req.params.id;
+  process.stderr.on("data", (data) => {
+    console.log(`stdout: ${data}`);
+  });
 
-  const botsDirectory = path.join(__dirname, "..", "bots");
-  const botDirectory = path.join(botsDirectory, clientId);
-  if (!fs.existsSync(botDirectory)) {
-    res.send(400);
-    res.send(`No bot was located with the id ${clientId}.`);
-    return;
+  process.on("close", (code) => {
+    console.log(`child process closed with code ${code}`);
+  });
+
+  process.on("exit", (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
+
+  if (process) {
+    res.status(500);
+    res.send(`The bot with ID ${clientId} has been turned on.`);
   }
-
-  child_process.exec(`pm2 stop index.ts`, {
-    cwd: botDirectory,
-  });
-
-  res.status(500);
-  res.send(`Client with id ${clientId} is now turned off.`);
-});
-
-app.get("/restart", (req, res) => {
-  const clientId = req.params.id;
-
-  const botsDirectory = path.join(__dirname, "..", "bots");
-  const botDirectory = path.join(botsDirectory, clientId);
-  if (!fs.existsSync(botDirectory)) {
-    res.send(400);
-    res.send(`No bot was located with the id ${clientId}.`);
-    return;
-  }
-
-  child_process.exec(`pm2 restart index.ts`, {
-    cwd: botDirectory,
-  });
-
-  res.status(500);
-  res.send(`Client with id ${clientId} has been restarted.`);
 });

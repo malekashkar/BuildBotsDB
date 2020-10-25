@@ -17,7 +17,7 @@ export default class Modules {
   constructor(client: Client, settings: ISettings) {
     client.login(settings.token);
     logger.info("BOT", `Logging into bot with ID "${settings.clientId}".`);
-
+    
     this.loadDatabase(
       `mongodb://localhost/${settings.clientId}` // ${env.DB_USER}:${env.DB_PASSWORD}@${env.DB_HOST}${env.DB_PORT}/${env.DB_AUTHDB}
     );
