@@ -108,13 +108,11 @@ app.get("/start", async (req, res) => {
     return;
   }
 
-  const process = child_process.spawn(
-    `pm2`,
-    ["start", "index.ts", "--name", clientId],
-    {
-      cwd: botDirectory,
-    }
-  );
+  const process = child_process.spawn(`ts-node`, ["index.ts"], {
+    cwd: botDirectory,
+  });
+
+  console.log(`process ran`, process)
 
   process.stdout.on("data", function (data) {
     console.log(data.toString());
