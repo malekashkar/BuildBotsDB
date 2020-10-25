@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import fetch from "node-fetch";
 import path from "path";
 import fs from "fs";
-import child_process from "child_process";
+import child_process, { execSync, spawn } from "child_process";
 import pm2 from "pm2";
 
 const app = express();
@@ -119,7 +119,7 @@ app.get("/start", async (req, res) => {
         name: clientId,
         script: `index.ts`,
         cwd: botDirectory,
-        interpreter: "ts-node",
+        interpreter: "/usr/lib/node_modules/pm2/node_modules/.bin/ts-node",
       },
       (err: Error) => {
         pm2.disconnect();
