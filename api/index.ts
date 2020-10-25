@@ -128,28 +128,6 @@ app.get("/start", async (req, res) => {
     );
   });
 
-  /*
-  const process = child_process.spawn(`ts-node`, ["index.ts"], {
-    cwd: botDirectory,
-  });
-
-  process.stdout.on("data", function (data) {
-    console.log(data.toString());
-  });
-
-  process.stderr.on("data", function (data) {
-    console.log(data.toString());
-  });
-
-  process.on("close", function (code) {
-    console.log("Finished with code " + code);
-  });
-
-  process.on("exit", function (code) {
-    console.log("Finished with exit " + code);
-  });
- */
-
   if (process) {
     res.status(500);
     res.send(`The bot with ID ${clientId} has been turned on.`);

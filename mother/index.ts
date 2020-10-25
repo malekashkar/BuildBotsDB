@@ -1,13 +1,17 @@
 import ms from "ms";
+import _ from "lodash";
 import path from "path";
 import fs from "fs-extra";
-import _ from "lodash";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
+import tunnel from "tunnel-ssh";
 
 import Client from "./structures/client";
 import Event from "./events";
 import logger from "./utils/logger";
 import Command from "./commands";
+
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 import { ISettings } from "../api/index";
 import { GiveawayModel } from "./models/giveaway";
@@ -27,24 +31,46 @@ export default class Modules {
   }
 
   loadDatabase(dbName: string) {
-    mongoose.connect(
-      `mongodb://localhost`,
+    tunnel(
       {
-        dbName,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useCreateIndex: true,
-        connectTimeoutMS: 60000,
-        socketTimeoutMS: 60000,
-        serverSelectionTimeoutMS: 60000,
+        username: process.env.SSH_USER,
+        password: process.env.SSH_PASS,
+        host: process.env.SSH_HOSTNAME,
+        port: parseInt(process.env.SSH_PORT),
+        dstPort: parseInt(process.env.DB_PORT),
       },
-      (err) => {
-        if (err) logger.error("DATABASE", err);
-        else
-          logger.info(
-            "DATABASE",
-            `The database has been connected successfully.`
+      async (err: Error) => {
+        if (err)
+          logger.error(
+            "SSH",
+            `There was an error connected to the SSH. ${err}`
           );
+        else logger.info("SSH", `Successfully logged into the SSH.`);
+
+        mongoose.connect(
+          `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/`,
+          {
+            dbName,
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useCreateIndex: true,
+            connectTimeoutMS: 60000,
+            socketTimeoutMS: 60000,
+            serverSelectionTimeoutMS: 60000,
+            auth: {
+              user: process.env.DB_USER,
+              password: process.env.DB_PASSWORD,
+            },
+          },
+          (err) => {
+            if (err) logger.error("DATABASE", err);
+            else
+              logger.info(
+                "DATABASE",
+                `The database has been connected successfully.`
+              );
+          }
+        );
       }
     );
   }
