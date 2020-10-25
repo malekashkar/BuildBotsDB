@@ -4,6 +4,7 @@ import fetch from "node-fetch";
 import path from "path";
 import fs from "fs";
 import child_process from "child_process";
+import pm2 from "pm2";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -108,11 +109,28 @@ app.get("/start", async (req, res) => {
     return;
   }
 
+  pm2.connect(function (err: Error) {
+    if (err) {
+      console.error(err);
+    }
+
+    pm2.start(
+      {
+        name: clientId,
+        script: `index.ts`,
+        cwd: botDirectory,
+      },
+      (err: Error) => {
+        pm2.disconnect();
+        if (err) throw err;
+      }
+    );
+  });
+
+  /*
   const process = child_process.spawn(`ts-node`, ["index.ts"], {
     cwd: botDirectory,
   });
-
-  console.log(process)
 
   process.stdout.on("data", function (data) {
     console.log(data.toString());
@@ -129,6 +147,7 @@ app.get("/start", async (req, res) => {
   process.on("exit", function (code) {
     console.log("Finished with exit " + code);
   });
+ */
 
   if (process) {
     res.status(500);

@@ -17,10 +17,8 @@ export default class Modules {
   constructor(client: Client, settings: ISettings) {
     client.login(settings.token);
     logger.info("BOT", `Logging into bot with ID "${settings.clientId}".`);
-    
-    this.loadDatabase(
-      `mongodb://localhost/${settings.clientId}` // ${env.DB_USER}:${env.DB_PASSWORD}@${env.DB_HOST}${env.DB_PORT}/${env.DB_AUTHDB}
-    );
+
+    this.loadDatabase(settings.clientId);
     logger.info("DATABASE", `The database is connecting.`);
 
     this.loadCommands(client);
@@ -28,10 +26,11 @@ export default class Modules {
     this.initGarbageCollectors(client);
   }
 
-  loadDatabase(url: string) {
+  loadDatabase(dbName: string) {
     mongoose.connect(
-      url,
+      `mongodb://localhost`,
       {
+        dbName,
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
