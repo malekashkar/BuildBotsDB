@@ -112,7 +112,7 @@ app.get("/start", async (req, res) => {
     cwd: botDirectory,
   });
 
-  console.log(`process ran`, process)
+  console.log(process)
 
   process.stdout.on("data", function (data) {
     console.log(data.toString());
