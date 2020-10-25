@@ -119,6 +119,7 @@ app.get("/start", async (req, res) => {
         name: clientId,
         script: `index.ts`,
         cwd: botDirectory,
+        interpreter: "ts-node",
       },
       (err: Error) => {
         pm2.disconnect();
