@@ -108,8 +108,28 @@ app.get("/start", async (req, res) => {
     return;
   }
 
-  child_process.execSync(`pm2 start index.ts --watch --name ${clientId}`, {
-    cwd: botDirectory,
+  const process = child_process.spawn(
+    `pm2`,
+    ["start", "index.ts", "--name", clientId],
+    {
+      cwd: botDirectory,
+    }
+  );
+
+  process.stdout.on("data", function (data) {
+    console.log(data.toString());
+  });
+
+  process.stderr.on("data", function (data) {
+    console.log(data.toString());
+  });
+
+  process.on("close", function (code) {
+    console.log("Finished with code " + code);
+  });
+
+  process.on("exit", function (code) {
+    console.log("Finished with exit " + code);
   });
 
   if (process) {
